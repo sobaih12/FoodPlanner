@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomePage.RandomMealFragment.View.RandomMealFragmentView" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="1000dp">
+
+        <ImageView
+            android:id="@+id/random_fragment_image_view"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="32dp"
+            tools:layout_editor_absoluteX="105dp"
+            tools:layout_editor_absoluteY="52dp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="161dp"
+            android:layout_height="24dp"
+            android:text="TextView"
+            tools:layout_editor_absoluteX="125dp"
+            tools:layout_editor_absoluteY="385dp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="235dp"
+            android:layout_height="34dp"
+            android:layout_marginTop="28dp"
+            android:text="TextView"
+            android:textSize="28sp"
+            app:layout_constraintLeft_toLeftOf="@id/guideline"
+            app:layout_constraintRight_toRightOf="@id/guideline2"
+            app:layout_constraintTop_toBottomOf="@id/random_fragment_image_view"
+
+            />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="161dp"
+            android:layout_height="24dp"
+            android:text="TextView"
+            tools:layout_editor_absoluteX="125dp"
+            tools:layout_editor_absoluteY="323dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="330dp"
+            android:layout_height="119dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            tools:layout_editor_absoluteY="481dp" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            tools:layout_editor_absoluteX="17dp"
+            tools:layout_editor_absoluteY="424dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="17dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="395dp" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="639dp" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="378dp"
+            android:layout_height="227dp"
+            android:text="TextView"
+            tools:layout_editor_absoluteX="18dp"
+            tools:layout_editor_absoluteY="689dp" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            tools:layout_editor_absoluteX="18dp"
+            tools:layout_editor_absoluteY="945dp" />
+
+        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+            android:id="@+id/youtube_player_view"
+            android:layout_width="376dp"
+            android:layout_height="229dp"
+
+            app:autoPlay="true"
+            app:videoId="S0Q4gqBUs7c"
+            tools:layout_editor_absoluteX="18dp"
+            tools:layout_editor_absoluteY="1004dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.core.widget.NestedScrollView>

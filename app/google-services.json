@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "86288114919",
+    "project_id": "comedo-c7b20",
+    "storage_bucket": "comedo-c7b20.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:86288114919:android:dc8ca7e9aee96db261ee42",
+        "android_client_info": {
+          "package_name": "com.example.comedo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC-56JMJodMQ49e--zYvKZ_4BD_OUA7oc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homePageFragment">
+
+    <fragment
+        android:id="@+id/calenderFragment"
+        android:name="com.example.comedo.HomePage.CalenderFragment"
+        android:label="fragment_calender"
+        tools:layout="@layout/fragment_calender" />
+    <fragment
+        android:id="@+id/homePageFragment"
+        android:name="com.example.comedo.HomePage.HomeFragment.View.HomePageFragment"
+        android:label="fragment_home_page"
+        tools:layout="@layout/fragment_home_page" >
+        <action
+            android:id="@+id/action_homePageFragment_to_randomMealFragment"
+            app:destination="@id/randomMealFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteFragment"
+        android:name="com.example.comedo.HomePage.FavouriteFragment"
+        android:label="fragment_favourite"
+        tools:layout="@layout/fragment_favourite" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.comedo.HomePage.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.comedo.HomePage.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/randomMealFragment"
+        android:name="com.example.comedo.HomePage.RandomMealFragment.View.RandomMealFragmentView"
+        android:label="fragment_random_meal"
+        tools:layout="@layout/fragment_random_meal" >
+        <argument
+            android:name="mealData"
+            app:argType="com.example.comedo.Models.MealModel" />
+    </fragment>
+</navigation>
