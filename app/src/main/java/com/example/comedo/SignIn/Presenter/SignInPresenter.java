@@ -48,10 +48,10 @@ public class SignInPresenter implements SignInPresenterInterface{
 
     @Override
     public void checkIfSignedIn() {
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if (currentUser != null) {
-//            signInViewInterface.successSignUp();
-//        }
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            signInViewInterface.successSignUp();
+        }
     }
 
 

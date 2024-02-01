@@ -45,10 +45,7 @@ public class HomePageFragmentPresenter implements HomePageFragmentPresenterInter
             @Override
             public void onResponse(Call<MealListModel> call, Response<MealListModel> response) {
                 mealModels = response.body().getMeals();
-
                 homePageFragmentInterface.onSuccessRandomMeal(mealModels.get(0));
-
-
             }
 
             @Override
