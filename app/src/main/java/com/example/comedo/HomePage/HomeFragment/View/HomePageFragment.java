@@ -59,7 +59,7 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         homePageFragmentPresenterInterface =  new HomePageFragmentPresenter(this);
 
         recyclerView = view.findViewById(R.id.category_recycler);
-        randomImageView = view.findViewById(R.id.random_image_view);
+        randomImageView = view.findViewById(R.id.meal_image_view);
         randomTextView = view.findViewById(R.id.random_text_view);
         homePageFragmentPresenterInterface.onCreateViewRandomMeal();
         homePageFragmentPresenterInterface.onCreateViewCategories();
@@ -78,7 +78,6 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         randomImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("TAG", "onClick: aaaaaaaaaaaaaa");
                 HomePageFragmentDirections.ActionHomePageFragmentToRandomMealFragment action = HomePageFragmentDirections.actionHomePageFragmentToRandomMealFragment(mealModel);
                 Navigation.findNavController(v).navigate(action);
             }

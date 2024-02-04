@@ -31,9 +31,13 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.comedo.HomePage.SearchFragment"
+        android:name="com.example.comedo.HomePage.SearchFragment.View.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_randomMealFragment"
+            app:destination="@id/randomMealFragment" />
+    </fragment>
     <fragment
         android:id="@+id/randomMealFragment"
         android:name="com.example.comedo.HomePage.RandomMealFragment.View.RandomMealFragmentView"

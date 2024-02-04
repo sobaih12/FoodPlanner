@@ -47,7 +47,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         holder.measuresTextView.setText(item.getMeasure());
         Glide.with(holder.itemView.getContext())
                 .load(url+item.getIngredient()+".png")
-                .apply(new RequestOptions().override(379, 235).centerCrop())
+                .apply(new RequestOptions().override(90, 90))
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .error(R.drawable.ic_launcher_background)
                 .into(holder.imageView);

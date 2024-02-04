@@ -17,9 +17,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.comedo.HomePage.HomeFragment.View.CategoriesAdapter;
 import com.example.comedo.HomePage.RandomMealFragment.Presenter.RandomMealFragmentPresenter;
 import com.example.comedo.HomePage.RandomMealFragment.Presenter.RandomMealFragmentPresenterInterface;
+import com.example.comedo.HomePage.SearchFragment.Presenter.SearchPresenter;
+import com.example.comedo.HomePage.SearchFragment.Presenter.SearchPresenterInterface;
 import com.example.comedo.Models.IngredientItemModel;
 import com.example.comedo.Models.MealModel;
 import com.example.comedo.R;
@@ -34,9 +35,12 @@ import java.util.List;
 public class RandomMealFragmentView extends Fragment implements RandomMealFragmentViewInterface{
 
     RandomMealFragmentPresenterInterface randomMealFragmentPresenterInterface;
+    SearchPresenterInterface searchPresenterInterface;
+
     TextView mealName;
     TextView countryName;
     TextView descriptionName;
+    TextView mealNameMain;
     ImageView imageView;
     YouTubePlayerView youTubePlayerView;
     List<IngredientItemModel> ingredientList = new ArrayList<>();
@@ -53,10 +57,11 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
                              Bundle savedInstanceState) {
         View view;
         view = inflater.inflate(R.layout.fragment_random_meal, container, false);
+        mealNameMain = view.findViewById(R.id.meal_name_text_view_2);
         mealName = view.findViewById(R.id.meal_name_text_view);
         countryName = view.findViewById(R.id.country_text_view);
         descriptionName = view.findViewById(R.id.description_text_view);
-        imageView = view.findViewById(R.id.random_image_view);
+        imageView = view.findViewById(R.id.meal_image_view);
         youTubePlayerView = view.findViewById(R.id.youtube_player_view);
         recyclerView = view.findViewById(R.id.ingredients_recycler_view);
 
@@ -69,6 +74,9 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
 
         randomMealFragmentPresenterInterface = new RandomMealFragmentPresenter(this);
         MealModel mealModel = RandomMealFragmentViewArgs.fromBundle(getArguments()).getMealData();
+        searchPresenterInterface = new SearchPresenter(this);
+
+        mealNameMain.setText(mealModel.getStrMeal());
         mealName.setText(mealModel.getStrMeal());
         countryName.setText("  "+mealModel.getStrArea()+"  ");
         descriptionName.setText(mealModel.getStrInstructions());
@@ -141,8 +149,31 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
         else return "";
     }
     @Override
-    public void onSuccessRandomMeal() {
+    public void onSuccessRandomMeal(MealModel mealModel) {
+        mealNameMain.setText(mealModel.getStrMeal());
+        mealName.setText(mealModel.getStrMeal());
+        countryName.setText("  "+mealModel.getStrArea()+"  ");
+        descriptionName.setText(mealModel.getStrInstructions());
+        Glide.with(getContext()).load(mealModel.getStrMealThumb())
+                .apply(new RequestOptions().override(379, 235).centerCrop())
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .error(R.drawable.ic_launcher_background)
+                .into(imageView);
 
+
+
+        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+            @Override
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                String videoId = getId(mealModel.getStrYoutube());
+                if (videoId == ""){
+                    youTubePlayerView.release();
+                }
+                else{
+                    youTubePlayer.cueVideo(videoId,0);
+                }
+            }
+        });
     }
 
     @Override
