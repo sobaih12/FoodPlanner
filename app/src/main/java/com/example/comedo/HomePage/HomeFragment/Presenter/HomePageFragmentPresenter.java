@@ -9,9 +9,11 @@ import com.example.comedo.HomePage.HomeFragment.View.RandomMealApiService;
 import com.example.comedo.Models.AreaModel;
 import com.example.comedo.Models.CategoriesItemListModel;
 import com.example.comedo.Models.CategoriesItemModel;
+import com.example.comedo.Models.IngredientModel;
 import com.example.comedo.Models.MealListModel;
 import com.example.comedo.Models.MealModel;
 import com.example.comedo.Models.RootArea;
+import com.example.comedo.Models.RootIngredient;
 
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class HomePageFragmentPresenter implements HomePageFragmentPresenterInter
     List<MealModel> mealModels;
     List<CategoriesItemModel> categoriesItemModels;
     List<AreaModel> areaModels;
+    List<IngredientModel> ingredientsModels;
     HomePageFragmentInterface homePageFragmentInterface;
 
     public HomePageFragmentPresenter(HomePageFragmentInterface homePageFragmentInterface) {
@@ -93,6 +96,26 @@ public class HomePageFragmentPresenter implements HomePageFragmentPresenterInter
             @Override
             public void onFailure(Call<RootArea> call, Throwable t) {
                 homePageFragmentInterface.onFailureArea(t.getMessage());
+
+            }
+        });
+    }
+
+    @Override
+    public void onCreateViewIngredients() {
+        retrofit = new Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create()).build();
+        categoriesApiService = retrofit.create(CategoriesApiService.class);
+        Call<RootIngredient> call1 = categoriesApiService.getIngredients();
+        call1.enqueue(new Callback<RootIngredient>() {
+            @Override
+            public void onResponse(Call<RootIngredient> call, Response<RootIngredient> response) {
+                ingredientsModels = response.body().getIngredients();
+                homePageFragmentInterface.onSuccessIngredients(ingredientsModels);
+            }
+
+            @Override
+            public void onFailure(Call<RootIngredient> call, Throwable t) {
+                homePageFragmentInterface.onFailureIngredients(t.getMessage());
 
             }
         });

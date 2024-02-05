@@ -1,10 +1,10 @@
 package com.example.comedo.Models;
 
 public class IngredientModel {
-    public String idIngredient;
-    public String strIngredient;
-    public String strDescription;
-    public Object strType;
+    private String idIngredient;
+    private String strIngredient;
+    private String strDescription;
+    private Object strType;
 
     public IngredientModel() {
 

@@ -4,4 +4,5 @@ public interface HomePageFragmentPresenterInterface {
     void onCreateViewRandomMeal();
     void onCreateViewCategories();
     void onCreateViewAreas();
+    void onCreateViewIngredients();
 }

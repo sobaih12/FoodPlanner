@@ -27,21 +27,21 @@ import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.Sea
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter.SearchPresenterInterface;
 import com.example.comedo.Models.AreaModel;
 import com.example.comedo.Models.CategoriesItemModel;
+import com.example.comedo.Models.IngredientModel;
 import com.example.comedo.Models.MealModel;
 import com.example.comedo.R;
 
 import java.util.List;
 
 
-public class HomePageFragment extends Fragment implements HomePageFragmentInterface,OnCategoryClickListener ,OnAreaClickListener{
+public class HomePageFragment extends Fragment implements HomePageFragmentInterface,OnCategoryClickListener ,OnAreaClickListener,OnIngredientsClickListener{
 
 
     Context context ;
 
     CategoriesApiService categoriesApiService;
 
-    RecyclerView categoryRecyclerView;
-    RecyclerView areaRecycler;
+    RecyclerView categoryRecyclerView,areaRecycler,ingredientsRecycler;
     LinearLayoutManager linearLayoutManager;
     ImageView randomImageView;
     TextView randomTextView;
@@ -71,11 +71,13 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         searchByAreaPresenterInterface = new SearchByAreaPresenter(this);
         categoryRecyclerView = view.findViewById(R.id.category_recycler);
         areaRecycler = view.findViewById(R.id.area_recycler);
+        ingredientsRecycler = view.findViewById(R.id.ingredients_recycler);
         randomImageView = view.findViewById(R.id.meal_image_view);
         randomTextView = view.findViewById(R.id.random_text_view);
         homePageFragmentPresenterInterface.onCreateViewRandomMeal();
         homePageFragmentPresenterInterface.onCreateViewCategories();
         homePageFragmentPresenterInterface.onCreateViewAreas();
+        homePageFragmentPresenterInterface.onCreateViewIngredients();
         return view;
     }
 
@@ -132,6 +134,20 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
     }
 
     @Override
+    public void onSuccessIngredients(List<IngredientModel> ingredientModels) {
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        ingredientsRecycler.setLayoutManager(linearLayoutManager);
+        HomeIngredientsAdapter areaAdapter = new HomeIngredientsAdapter(getContext(), ingredientModels,this);
+        ingredientsRecycler.setAdapter(areaAdapter);
+    }
+
+    @Override
+    public void onFailureIngredients(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onCategoryClickListener(String categoryName) {
         HomePageFragmentDirections.ActionHomePageFragmentToSearchByCategoryView action =
                 HomePageFragmentDirections.actionHomePageFragmentToSearchByCategoryView(categoryName);
@@ -150,5 +166,10 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
                 HomePageFragmentDirections.actionHomePageFragmentToSearchByAreaView(areaName);
         action.setAreaName(areaName);
         Navigation.findNavController(requireView()).navigate(action);
+    }
+
+    @Override
+    public void onIngredientsClickListener(String ingredientsName) {
+        Toast.makeText(getContext(),ingredientsName, Toast.LENGTH_SHORT).show();
     }
 }
