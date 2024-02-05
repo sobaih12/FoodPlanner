@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_homePageFragment_to_randomMealFragment"
             app:destination="@id/randomMealFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_searchByCategoryView"
+            app:destination="@id/searchByCategoryView" />
     </fragment>
     <fragment
         android:id="@+id/favouriteFragment"
@@ -31,7 +34,7 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.comedo.HomePage.SearchFragment.View.SearchFragment"
+        android:name="com.example.comedo.HomePage.SearchFragment.SearchByNameView.View.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
@@ -46,5 +49,17 @@
         <argument
             android:name="mealData"
             app:argType="com.example.comedo.Models.MealModel" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchByCategoryView"
+        android:name="com.example.comedo.HomePage.SearchFragment.SearchByCategory.View.SearchByCategoryView"
+        android:label="fragment_search_by_category_view"
+        tools:layout="@layout/fragment_search_by_category_view" >
+        <argument
+            android:name="categoryName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_searchByCategoryView_to_randomMealFragment"
+            app:destination="@id/randomMealFragment" />
     </fragment>
 </navigation>

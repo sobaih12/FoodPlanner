@@ -11,7 +11,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.SearchByCategoryPresenter;
+import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.SearchByCategoryPresenterInterface;
+import com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter.SearchPresenterInterface;
 import com.example.comedo.Models.CategoriesItemModel;
 import com.example.comedo.Models.MealModel;
 import com.example.comedo.R;
@@ -28,7 +30,7 @@ import com.example.comedo.R;
 import java.util.List;
 
 
-public class HomePageFragment extends Fragment implements HomePageFragmentInterface {
+public class HomePageFragment extends Fragment implements HomePageFragmentInterface,OnCategoryClickListener {
 
 
     Context context ;
@@ -41,7 +43,11 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
     TextView randomTextView;
 
 
+
     HomePageFragmentPresenterInterface homePageFragmentPresenterInterface;
+    SearchPresenterInterface searchPresenterInterface;
+    SearchByCategoryPresenterInterface searchByCategoryPresenterInterface;
+    String message;
 
 
 
@@ -57,7 +63,7 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         View view;
         view =  inflater.inflate(R.layout.fragment_home_page, container, false);
         homePageFragmentPresenterInterface =  new HomePageFragmentPresenter(this);
-
+        searchByCategoryPresenterInterface = new SearchByCategoryPresenter(this);
         recyclerView = view.findViewById(R.id.category_recycler);
         randomImageView = view.findViewById(R.id.meal_image_view);
         randomTextView = view.findViewById(R.id.random_text_view);
@@ -95,7 +101,7 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerView.setLayoutManager(linearLayoutManager);
-        CategoriesAdapter categoriesAdapter = new CategoriesAdapter(getContext(), categoriesItemModel);
+        CategoriesAdapter categoriesAdapter = new CategoriesAdapter(getContext(), categoriesItemModel,this);
         recyclerView.setAdapter(categoriesAdapter);
     }
 
@@ -103,4 +109,33 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
     public void onFailureCategories(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onCategoryClickListener(String categoryName) {
+
+
+//        HomePageFragmentDirections.ActionHomePageFragmentToSearchByCategoryView action = HomePageFragmentDirections.ActionHomePageFragmentToSearchByCategoryView;
+//
+//        Navigation.findNavController(onView()).navigate(R.id.search_by_category);
+//
+//
+//        Toast.makeText(getContext(), categoryName, Toast.LENGTH_SHORT).show();
+//        searchByCategoryPresenterInterface.onViewCreatedSearchOnCategory(categoryName);
+
+        // Assuming you have defined the action in your navigation graph
+        HomePageFragmentDirections.ActionHomePageFragmentToSearchByCategoryView action =
+                HomePageFragmentDirections.actionHomePageFragmentToSearchByCategoryView(categoryName);
+
+        // Pass any necessary arguments to the action, if required
+        action.setCategoryName(categoryName);
+
+        // Use the NavController to navigate using the generated action
+        Navigation.findNavController(requireView()).navigate(action);
+    }
+    public  View onView(){
+        View view;
+        view = getView();
+        return view;
+    }
+
 }

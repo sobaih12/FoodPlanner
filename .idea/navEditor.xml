@@ -37,13 +37,18 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="256" />
-                            <option name="y" value="320" />
+                            <option name="x" value="316" />
+                            <option name="y" value="-420" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
                             <entry key="action_homePageFragment_to_randomMealFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_homePageFragment_to_searchByCategoryView">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -72,6 +77,18 @@
                           <Point>
                             <option name="x" value="500" />
                             <option name="y" value="368" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="searchByCategoryView">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="20" />
+                            <option name="y" value="-383" />
                           </Point>
                         </option>
                       </LayoutPositions>

@@ -10,4 +10,5 @@ public interface HomePageFragmentInterface {
     void onFailureRandomMeal(String message);
     void onSuccessCategories(List<CategoriesItemModel> categoriesItemModel);
     void onFailureCategories(String message);
+
 }
