@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_homePageFragment_to_searchByAreaView"
             app:destination="@id/searchByAreaView" />
+        <action
+            android:id="@+id/action_homePageFragment_to_searchByIngredientsView"
+            app:destination="@id/searchByIngredientsView" />
     </fragment>
     <fragment
         android:id="@+id/favouriteFragment"
@@ -76,5 +79,17 @@
         <action
             android:id="@+id/action_searchByAreaView_to_randomMealFragment"
             app:destination="@id/randomMealFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchByIngredientsView"
+        android:name="com.example.comedo.HomePage.SearchFragment.SearchByIngredients.View.SearchByIngredientsView"
+        android:label="fragment_search_by_ingredients_view"
+        tools:layout="@layout/fragment_search_by_ingredients_view" >
+        <action
+            android:id="@+id/action_searchByIngredientsView_to_randomMealFragment"
+            app:destination="@id/randomMealFragment" />
+        <argument
+            android:name="ingredientName"
+            app:argType="string" />
     </fragment>
 </navigation>

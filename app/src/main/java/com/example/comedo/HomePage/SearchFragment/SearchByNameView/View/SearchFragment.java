@@ -27,10 +27,6 @@ public class SearchFragment extends Fragment implements SearchViewInterface,OnMe
     LinearLayoutManager linearLayoutManager;
     ImageView randomImageView;
     EditText searchTextView;
-    private RadioButton chipCategory;
-    private RadioButton chipArea;
-    private RadioButton chipIngredient;
-    private RadioButton chipMeal;
 
 
 
@@ -51,56 +47,25 @@ public class SearchFragment extends Fragment implements SearchViewInterface,OnMe
         recyclerView = view.findViewById(R.id.search_recycler_view);
         randomImageView = view.findViewById(R.id.meal_image_view);
         searchTextView = view.findViewById(R.id.search_text);
-        chipCategory = view.findViewById(R.id.chip_category);
-        chipArea = view.findViewById(R.id.chip_area);
-        chipIngredient = view.findViewById(R.id.chip_ingredient);
-        chipMeal = view.findViewById(R.id.chip_meal);
 
-        chipMeal.setOnClickListener(new View.OnClickListener() {
+        searchTextView.setText("");
+        searchTextView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                searchTextView.setText("");
-                searchTextView.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                    }
+            }
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        searchPresenterInterface.onViewCreatedSearch(searchTextView.getText().toString());
-                    }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchPresenterInterface.onViewCreatedSearch(searchTextView.getText().toString());
+            }
 
-                    @Override
-                    public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
 
-                    }
-                });
             }
         });
-        chipCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchPresenterInterface.onViewCreatedSearchOnCategory("Seafood");
 
-//                searchTextView.addTextChangedListener(new TextWatcher() {
-//                    @Override
-//                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                        searchPresenterInterface.onViewCreatedSearchOnCategory("Seafood");
-//                    }
-//
-//                    @Override
-//                    public void afterTextChanged(Editable s) {
-//
-//                    }
-//                });
-            }
-        });
 
         return view;
     }

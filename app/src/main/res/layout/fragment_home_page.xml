@@ -156,6 +156,18 @@
         app:layout_constraintStart_toStartOf="@id/meal_image_view"
         app:layout_constraintTop_toTopOf="@+id/meal_image_view" />
 
+    <EditText
+        android:id="@+id/category_search_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Search On Category"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/category_recycler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/category_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/meal_image_view" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
 

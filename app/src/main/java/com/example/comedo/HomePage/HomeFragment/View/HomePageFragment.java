@@ -24,6 +24,8 @@ import com.example.comedo.HomePage.SearchFragment.SearchByArea.Presenter.SearchB
 import com.example.comedo.HomePage.SearchFragment.SearchByArea.Presenter.SearchByAreaPresenterInterface;
 import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.SearchByCategoryPresenter;
 import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.SearchByCategoryPresenterInterface;
+import com.example.comedo.HomePage.SearchFragment.SearchByIngredients.Presenter.SearchByIngredientsPresenter;
+import com.example.comedo.HomePage.SearchFragment.SearchByIngredients.Presenter.SearchByIngredientsPresenterInterface;
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter.SearchPresenterInterface;
 import com.example.comedo.Models.AreaModel;
 import com.example.comedo.Models.CategoriesItemModel;
@@ -51,6 +53,7 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
     HomePageFragmentPresenterInterface homePageFragmentPresenterInterface;
     SearchByCategoryPresenterInterface searchByCategoryPresenterInterface;
     SearchByAreaPresenterInterface searchByAreaPresenterInterface;
+    SearchByIngredientsPresenterInterface searchByIngredientsPresenterInterface;
 
 
 
@@ -69,6 +72,7 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         homePageFragmentPresenterInterface =  new HomePageFragmentPresenter(this);
         searchByCategoryPresenterInterface = new SearchByCategoryPresenter(this);
         searchByAreaPresenterInterface = new SearchByAreaPresenter(this);
+        searchByIngredientsPresenterInterface = new SearchByIngredientsPresenter(this);
         categoryRecyclerView = view.findViewById(R.id.category_recycler);
         areaRecycler = view.findViewById(R.id.area_recycler);
         ingredientsRecycler = view.findViewById(R.id.ingredients_recycler);
@@ -170,6 +174,10 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
 
     @Override
     public void onIngredientsClickListener(String ingredientsName) {
-        Toast.makeText(getContext(),ingredientsName, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(),ingredientsName, Toast.LENGTH_SHORT).show();
+        HomePageFragmentDirections.ActionHomePageFragmentToSearchByIngredientsView action =
+                HomePageFragmentDirections.actionHomePageFragmentToSearchByIngredientsView(ingredientsName);
+        action.setIngredientName(ingredientsName);
+        Navigation.findNavController(requireView()).navigate(action);
     }
 }
