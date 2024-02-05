@@ -17,8 +17,8 @@ public interface SearchApiService {
     @GET("filter.php")
     Single<MealPreviewModel> getSearchByCategory(@Query("c") String category);
     @GET("filter.php")
-    Single<MealListModel> getSearchByArea(@Query("a") String area);
+    Single<MealPreviewModel> getSearchByArea(@Query("a") String area);
     @GET("filter.php")
-    Single<MealListModel> getSearchByIngredient(@Query("i") String ingredient);
+    Single<MealPreviewModel> getSearchByIngredient(@Query("i") String ingredient);
 
 }

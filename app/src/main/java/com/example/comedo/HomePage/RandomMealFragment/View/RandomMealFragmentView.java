@@ -21,7 +21,7 @@ import com.example.comedo.HomePage.RandomMealFragment.Presenter.RandomMealFragme
 import com.example.comedo.HomePage.RandomMealFragment.Presenter.RandomMealFragmentPresenterInterface;
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter.SearchPresenter;
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter.SearchPresenterInterface;
-import com.example.comedo.Models.IngredientItemModel;
+import com.example.comedo.Models.IngredientWithMeasuresModel;
 import com.example.comedo.Models.MealModel;
 import com.example.comedo.R;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
@@ -43,7 +43,7 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
     TextView mealNameMain;
     ImageView imageView;
     YouTubePlayerView youTubePlayerView;
-    List<IngredientItemModel> ingredientList = new ArrayList<>();
+    List<IngredientWithMeasuresModel> ingredientList = new ArrayList<>();
     IngredientsAdapter ingredientsAdapter;
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
@@ -110,8 +110,8 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
 
 
     }
-    public static List<IngredientItemModel> processMealModel(MealModel mealModel) {
-        List<IngredientItemModel> ingredientList = new ArrayList<>();
+    public static List<IngredientWithMeasuresModel> processMealModel(MealModel mealModel) {
+        List<IngredientWithMeasuresModel> ingredientList = new ArrayList<>();
 
         addIngredientIfNotNull(ingredientList, mealModel.getStrIngredient1(), mealModel.getStrMeasure1());
         addIngredientIfNotNull(ingredientList, mealModel.getStrIngredient2(), mealModel.getStrMeasure2());
@@ -137,9 +137,9 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
 
         return ingredientList;
     }
-    private static void addIngredientIfNotNull(List<IngredientItemModel> list, String ingredient, String measure) {
+    private static void addIngredientIfNotNull(List<IngredientWithMeasuresModel> list, String ingredient, String measure) {
         if (!TextUtils.isEmpty(ingredient) && !TextUtils.isEmpty(measure)) {
-            list.add(new IngredientItemModel(ingredient, measure));
+            list.add(new IngredientWithMeasuresModel(ingredient, measure));
         }
     }
 

@@ -1,9 +1,6 @@
 package com.example.comedo.HomePage.RandomMealFragment.View;
 
-import static java.security.AccessController.getContext;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.comedo.Models.IngredientItemModel;
+import com.example.comedo.Models.IngredientWithMeasuresModel;
 import com.example.comedo.R;
 
 import java.util.List;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.ViewHolder> {
 
-    private List<IngredientItemModel> dataList;
+    private List<IngredientWithMeasuresModel> dataList;
     private Context context;
     private static final String url = "https://www.themealdb.com/images/ingredients/";
 
 
-    public IngredientsAdapter(List<IngredientItemModel> dataList, Context context) {
+    public IngredientsAdapter(List<IngredientWithMeasuresModel> dataList, Context context) {
         this.dataList = dataList;
         this.context = context;
     }
@@ -41,7 +38,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        IngredientItemModel item = dataList.get(position);
+        IngredientWithMeasuresModel item = dataList.get(position);
 
         holder.ingredientsTextView.setText(item.getIngredient());
         holder.measuresTextView.setText(item.getMeasure());

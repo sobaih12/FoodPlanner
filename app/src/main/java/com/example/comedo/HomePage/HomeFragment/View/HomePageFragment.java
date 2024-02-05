@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.comedo.HomePage.SearchFragment.SearchByArea.Presenter.SearchByAreaPresenter;
+import com.example.comedo.HomePage.SearchFragment.SearchByArea.Presenter.SearchByAreaPresenterInterface;
 import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.SearchByCategoryPresenter;
 import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.SearchByCategoryPresenterInterface;
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter.SearchPresenterInterface;
@@ -38,7 +40,7 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
 
     CategoriesApiService categoriesApiService;
 
-    RecyclerView recyclerView;
+    RecyclerView categoryRecyclerView;
     RecyclerView areaRecycler;
     LinearLayoutManager linearLayoutManager;
     ImageView randomImageView;
@@ -47,9 +49,9 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
 
 
     HomePageFragmentPresenterInterface homePageFragmentPresenterInterface;
-    SearchPresenterInterface searchPresenterInterface;
     SearchByCategoryPresenterInterface searchByCategoryPresenterInterface;
-    String message;
+    SearchByAreaPresenterInterface searchByAreaPresenterInterface;
+
 
 
 
@@ -66,7 +68,8 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         view =  inflater.inflate(R.layout.fragment_home_page, container, false);
         homePageFragmentPresenterInterface =  new HomePageFragmentPresenter(this);
         searchByCategoryPresenterInterface = new SearchByCategoryPresenter(this);
-        recyclerView = view.findViewById(R.id.category_recycler);
+        searchByAreaPresenterInterface = new SearchByAreaPresenter(this);
+        categoryRecyclerView = view.findViewById(R.id.category_recycler);
         areaRecycler = view.findViewById(R.id.area_recycler);
         randomImageView = view.findViewById(R.id.meal_image_view);
         randomTextView = view.findViewById(R.id.random_text_view);
@@ -104,9 +107,9 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
     public void onSuccessCategories(List<CategoriesItemModel> categoriesItemModel) {
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        categoryRecyclerView.setLayoutManager(linearLayoutManager);
         CategoriesAdapter categoriesAdapter = new CategoriesAdapter(getContext(), categoriesItemModel,this);
-        recyclerView.setAdapter(categoriesAdapter);
+        categoryRecyclerView.setAdapter(categoriesAdapter);
     }
 
     @Override
@@ -143,6 +146,9 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
 
     @Override
     public void onAreaClickListener(String areaName) {
-        Toast.makeText(getContext(),areaName, Toast.LENGTH_SHORT).show();
+        HomePageFragmentDirections.ActionHomePageFragmentToSearchByAreaView action =
+                HomePageFragmentDirections.actionHomePageFragmentToSearchByAreaView(areaName);
+        action.setAreaName(areaName);
+        Navigation.findNavController(requireView()).navigate(action);
     }
 }

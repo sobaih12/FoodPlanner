@@ -8,6 +8,7 @@ public class MealPreviewModel{
 	@SerializedName("meals")
 	 List<MealsItem> meals;
 
+
 	public MealPreviewModel(List<MealsItem> filteredMeals) {
 		this.meals = filteredMeals;
 	}
