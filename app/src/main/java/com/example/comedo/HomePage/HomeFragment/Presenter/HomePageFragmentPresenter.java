@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.comedo.HomePage.HomeFragment.View.CategoriesApiService;
 import com.example.comedo.HomePage.HomeFragment.View.HomePageFragmentInterface;
 import com.example.comedo.HomePage.HomeFragment.View.RandomMealApiService;
+import com.example.comedo.Models.AreaModel;
 import com.example.comedo.Models.CategoriesItemListModel;
 import com.example.comedo.Models.CategoriesItemModel;
 import com.example.comedo.Models.MealListModel;
 import com.example.comedo.Models.MealModel;
+import com.example.comedo.Models.RootArea;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class HomePageFragmentPresenter implements HomePageFragmentPresenterInter
     LinearLayoutManager linearLayoutManager;
     List<MealModel> mealModels;
     List<CategoriesItemModel> categoriesItemModels;
+    List<AreaModel> areaModels;
     HomePageFragmentInterface homePageFragmentInterface;
 
     public HomePageFragmentPresenter(HomePageFragmentInterface homePageFragmentInterface) {
@@ -70,6 +73,26 @@ public class HomePageFragmentPresenter implements HomePageFragmentPresenterInter
             @Override
             public void onFailure(Call<CategoriesItemListModel> call, Throwable t) {
                 homePageFragmentInterface.onFailureCategories(t.getMessage());
+
+            }
+        });
+    }
+
+    @Override
+    public void onCreateViewAreas() {
+        retrofit = new Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create()).build();
+        categoriesApiService = retrofit.create(CategoriesApiService.class);
+        Call<RootArea> call1 = categoriesApiService.getAreas();
+        call1.enqueue(new Callback<RootArea>() {
+            @Override
+            public void onResponse(Call<RootArea> call, Response<RootArea> response) {
+                areaModels = response.body().getAreas();
+                homePageFragmentInterface.onSuccessArea(areaModels);
+            }
+
+            @Override
+            public void onFailure(Call<RootArea> call, Throwable t) {
+                homePageFragmentInterface.onFailureArea(t.getMessage());
 
             }
         });

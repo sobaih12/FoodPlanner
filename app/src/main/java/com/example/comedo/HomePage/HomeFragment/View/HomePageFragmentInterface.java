@@ -1,5 +1,6 @@
 package com.example.comedo.HomePage.HomeFragment.View;
 
+import com.example.comedo.Models.AreaModel;
 import com.example.comedo.Models.CategoriesItemModel;
 import com.example.comedo.Models.MealModel;
 
@@ -10,5 +11,7 @@ public interface HomePageFragmentInterface {
     void onFailureRandomMeal(String message);
     void onSuccessCategories(List<CategoriesItemModel> categoriesItemModel);
     void onFailureCategories(String message);
+    void onSuccessArea(List<AreaModel> areaModels);
+    void onFailureArea(String message);
 
 }

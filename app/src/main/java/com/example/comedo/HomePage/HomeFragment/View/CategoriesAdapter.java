@@ -58,7 +58,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
         holder.nameTextView.setText(item.getStrCategory());
         Glide.with(context)
                 .load(items.get(position).getStrCategoryThumb())
-                .apply(new RequestOptions().override(150, 150).centerCrop())
+                .apply(new RequestOptions().override(120, 120))
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .error(R.drawable.ic_launcher_background)
                 .into(holder.roundedImageView);

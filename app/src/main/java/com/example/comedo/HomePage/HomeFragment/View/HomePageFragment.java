@@ -23,6 +23,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.SearchByCategoryPresenter;
 import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.SearchByCategoryPresenterInterface;
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter.SearchPresenterInterface;
+import com.example.comedo.Models.AreaModel;
 import com.example.comedo.Models.CategoriesItemModel;
 import com.example.comedo.Models.MealModel;
 import com.example.comedo.R;
@@ -30,7 +31,7 @@ import com.example.comedo.R;
 import java.util.List;
 
 
-public class HomePageFragment extends Fragment implements HomePageFragmentInterface,OnCategoryClickListener {
+public class HomePageFragment extends Fragment implements HomePageFragmentInterface,OnCategoryClickListener ,OnAreaClickListener{
 
 
     Context context ;
@@ -38,6 +39,7 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
     CategoriesApiService categoriesApiService;
 
     RecyclerView recyclerView;
+    RecyclerView areaRecycler;
     LinearLayoutManager linearLayoutManager;
     ImageView randomImageView;
     TextView randomTextView;
@@ -65,10 +67,12 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         homePageFragmentPresenterInterface =  new HomePageFragmentPresenter(this);
         searchByCategoryPresenterInterface = new SearchByCategoryPresenter(this);
         recyclerView = view.findViewById(R.id.category_recycler);
+        areaRecycler = view.findViewById(R.id.area_recycler);
         randomImageView = view.findViewById(R.id.meal_image_view);
         randomTextView = view.findViewById(R.id.random_text_view);
         homePageFragmentPresenterInterface.onCreateViewRandomMeal();
         homePageFragmentPresenterInterface.onCreateViewCategories();
+        homePageFragmentPresenterInterface.onCreateViewAreas();
         return view;
     }
 
@@ -111,25 +115,24 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
     }
 
     @Override
+    public void onSuccessArea(List<AreaModel> areaModels) {
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        areaRecycler.setLayoutManager(linearLayoutManager);
+        AreaAdapter areaAdapter = new AreaAdapter(getContext(), areaModels,this);
+        areaRecycler.setAdapter(areaAdapter);
+    }
+
+    @Override
+    public void onFailureArea(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onCategoryClickListener(String categoryName) {
-
-
-//        HomePageFragmentDirections.ActionHomePageFragmentToSearchByCategoryView action = HomePageFragmentDirections.ActionHomePageFragmentToSearchByCategoryView;
-//
-//        Navigation.findNavController(onView()).navigate(R.id.search_by_category);
-//
-//
-//        Toast.makeText(getContext(), categoryName, Toast.LENGTH_SHORT).show();
-//        searchByCategoryPresenterInterface.onViewCreatedSearchOnCategory(categoryName);
-
-        // Assuming you have defined the action in your navigation graph
         HomePageFragmentDirections.ActionHomePageFragmentToSearchByCategoryView action =
                 HomePageFragmentDirections.actionHomePageFragmentToSearchByCategoryView(categoryName);
-
-        // Pass any necessary arguments to the action, if required
         action.setCategoryName(categoryName);
-
-        // Use the NavController to navigate using the generated action
         Navigation.findNavController(requireView()).navigate(action);
     }
     public  View onView(){
@@ -138,4 +141,8 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         return view;
     }
 
+    @Override
+    public void onAreaClickListener(String areaName) {
+        Toast.makeText(getContext(),areaName, Toast.LENGTH_SHORT).show();
+    }
 }
