@@ -1,6 +1,8 @@
 package com.example.comedo.HomePage.HomeFragment.Presenter;
 
 
+import android.util.Log;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.comedo.HomePage.HomeFragment.View.CategoriesApiService;
@@ -12,11 +14,21 @@ import com.example.comedo.Models.CategoriesItemModel;
 import com.example.comedo.Models.IngredientModel;
 import com.example.comedo.Models.MealListModel;
 import com.example.comedo.Models.MealModel;
+import com.example.comedo.Models.MealPreviewModel;
 import com.example.comedo.Models.RootArea;
 import com.example.comedo.Models.RootIngredient;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,23 +74,51 @@ public class HomePageFragmentPresenter implements HomePageFragmentPresenterInter
     }
 
     @Override
-    public void onCreateViewCategories() {
-        retrofit = new Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create()).build();
+    public void onCreateViewCategories(String searchText) {
+        retrofit = new Retrofit.Builder().baseUrl(baseUrl).addCallAdapterFactory(RxJava3CallAdapterFactory.create()).addConverterFactory(GsonConverterFactory.create()).build();
         categoriesApiService = retrofit.create(CategoriesApiService.class);
-        Call<CategoriesItemListModel> call1 = categoriesApiService.getCategories();
-        call1.enqueue(new Callback<CategoriesItemListModel>() {
-            @Override
-            public void onResponse(Call<CategoriesItemListModel> call, Response<CategoriesItemListModel> response) {
-                categoriesItemModels = response.body().getCategories();
-                homePageFragmentInterface.onSuccessCategories(categoriesItemModels);
-            }
+        Single<CategoriesItemListModel> call1 = categoriesApiService.getCategories();
+        call1.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<CategoriesItemListModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
 
-            @Override
-            public void onFailure(Call<CategoriesItemListModel> call, Throwable t) {
-                homePageFragmentInterface.onFailureCategories(t.getMessage());
+                    }
 
-            }
-        });
+                    @Override
+                    public void onSuccess(@NonNull CategoriesItemListModel categoriesItemListModel) {
+                        Observable.fromIterable(categoriesItemListModel.getCategories())
+                                .filter(category -> category.getStrCategory().toLowerCase().contains(searchText))
+                                .collect(Collectors.toList())
+                                .subscribe(filteredMeals -> {
+                                    homePageFragmentInterface.onSuccessCategories(filteredMeals);
+                                });
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.i("TAG", "onError: "+e.getMessage());
+                    }
+                });
+
+
+
+
+
+//        call1.enqueue(new Callback<CategoriesItemListModel>() {
+//            @Override
+//            public void onResponse(Call<CategoriesItemListModel> call, Response<CategoriesItemListModel> response) {
+//                categoriesItemModels = response.body().getCategories();
+//                homePageFragmentInterface.onSuccessCategories(categoriesItemModels);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<CategoriesItemListModel> call, Throwable t) {
+//                homePageFragmentInterface.onFailureCategories(t.getMessage());
+//
+//            }
+//        });
     }
 
     @Override

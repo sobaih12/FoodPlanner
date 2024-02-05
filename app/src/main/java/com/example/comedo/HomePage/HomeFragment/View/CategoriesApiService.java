@@ -5,12 +5,13 @@ import com.example.comedo.Models.CategoriesItemListModel;
 import com.example.comedo.Models.RootArea;
 import com.example.comedo.Models.RootIngredient;
 
+import io.reactivex.rxjava3.core.Single;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface CategoriesApiService {
     @GET("categories.php")
-    Call<CategoriesItemListModel> getCategories();
+    Single<CategoriesItemListModel> getCategories();
     @GET("list.php?a=list")
     Call<RootArea> getAreas();
     @GET("list.php?i=list")

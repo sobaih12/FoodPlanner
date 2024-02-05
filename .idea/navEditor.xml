@@ -37,8 +37,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="316" />
-                            <option name="y" value="-420" />
+                            <option name="x" value="288" />
+                            <option name="y" value="-729" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -48,7 +48,17 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_homePageFragment_to_searchByAreaView">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_homePageFragment_to_searchByCategoryView">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_homePageFragment_to_searchByIngredientsView">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -82,6 +92,27 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="searchByAreaView">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-262" />
+                            <option name="y" value="-452" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_searchByAreaView_to_randomMealFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="searchByCategoryView">
                     <value>
                       <LayoutPositions>
@@ -90,6 +121,36 @@
                             <option name="x" value="20" />
                             <option name="y" value="-383" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_searchByCategoryView_to_randomMealFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="searchByIngredientsView">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="617" />
+                            <option name="y" value="-730" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_searchByIngredientsView_to_randomMealFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>

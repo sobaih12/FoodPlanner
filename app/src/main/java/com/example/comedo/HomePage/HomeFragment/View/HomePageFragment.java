@@ -11,9 +11,12 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +50,7 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
     LinearLayoutManager linearLayoutManager;
     ImageView randomImageView;
     TextView randomTextView;
+    EditText categorySearch;
 
 
 
@@ -65,6 +69,12 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        categorySearch.getText().clear();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view;
@@ -78,8 +88,28 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         ingredientsRecycler = view.findViewById(R.id.ingredients_recycler);
         randomImageView = view.findViewById(R.id.meal_image_view);
         randomTextView = view.findViewById(R.id.random_text_view);
+        categorySearch = view.findViewById(R.id.category_search_edit_text);
         homePageFragmentPresenterInterface.onCreateViewRandomMeal();
-        homePageFragmentPresenterInterface.onCreateViewCategories();
+        homePageFragmentPresenterInterface.onCreateViewCategories(categorySearch.getText().toString());
+        categorySearch.setText("");
+        categorySearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                homePageFragmentPresenterInterface.onCreateViewCategories(categorySearch.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
         homePageFragmentPresenterInterface.onCreateViewAreas();
         homePageFragmentPresenterInterface.onCreateViewIngredients();
         return view;
