@@ -25,7 +25,7 @@ public class SearchFragment extends Fragment implements SearchViewInterface,OnMe
     SearchPresenterInterface searchPresenterInterface;
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
-    ImageView randomImageView;
+    ImageView randomImageView,noResultImage;
     EditText searchTextView;
 
 
@@ -47,6 +47,7 @@ public class SearchFragment extends Fragment implements SearchViewInterface,OnMe
         recyclerView = view.findViewById(R.id.search_recycler_view);
         randomImageView = view.findViewById(R.id.meal_image_view);
         searchTextView = view.findViewById(R.id.search_text);
+        noResultImage = view.findViewById(R.id.no_result);
 
         searchTextView.setText("");
         searchTextView.addTextChangedListener(new TextWatcher() {
@@ -77,6 +78,13 @@ public class SearchFragment extends Fragment implements SearchViewInterface,OnMe
             recyclerView.setLayoutManager(linearLayoutManager);
             SearchAdapter searchAdapter = new SearchAdapter(mealListModel,requireContext(),this);
             recyclerView.setAdapter(searchAdapter);
+        if (mealListModel.getMeals().isEmpty()) {
+            recyclerView.setVisibility(View.INVISIBLE);
+            noResultImage.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            noResultImage.setVisibility(View.GONE);
+        }
 
 
     }

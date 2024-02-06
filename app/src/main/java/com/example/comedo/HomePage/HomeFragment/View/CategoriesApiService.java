@@ -13,7 +13,7 @@ public interface CategoriesApiService {
     @GET("categories.php")
     Single<CategoriesItemListModel> getCategories();
     @GET("list.php?a=list")
-    Call<RootArea> getAreas();
+    Single<RootArea> getAreas();
     @GET("list.php?i=list")
-    Call<RootIngredient> getIngredients();
+    Single<RootIngredient> getIngredients();
 }

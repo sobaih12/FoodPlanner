@@ -48,9 +48,9 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
 
     RecyclerView categoryRecyclerView,areaRecycler,ingredientsRecycler;
     LinearLayoutManager linearLayoutManager;
-    ImageView randomImageView;
+    ImageView randomImageView,noResult;
     TextView randomTextView;
-    EditText categorySearch;
+    EditText categorySearch,areaSearch,ingredientsSearch;
 
 
 
@@ -72,6 +72,8 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
     public void onPause() {
         super.onPause();
         categorySearch.getText().clear();
+        areaSearch.getText().clear();
+        ingredientsSearch.getText().clear();
     }
 
     @Override
@@ -86,12 +88,19 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         categoryRecyclerView = view.findViewById(R.id.category_recycler);
         areaRecycler = view.findViewById(R.id.area_recycler);
         ingredientsRecycler = view.findViewById(R.id.ingredients_recycler);
+        noResult = view.findViewById(R.id.free_palestine_image_view);
         randomImageView = view.findViewById(R.id.meal_image_view);
         randomTextView = view.findViewById(R.id.random_text_view);
         categorySearch = view.findViewById(R.id.category_search_edit_text);
+        areaSearch = view.findViewById(R.id.country_search_edit_text);
+        ingredientsSearch = view.findViewById(R.id.search_ingredients_edit_text);
         homePageFragmentPresenterInterface.onCreateViewRandomMeal();
         homePageFragmentPresenterInterface.onCreateViewCategories(categorySearch.getText().toString());
         categorySearch.setText("");
+        homePageFragmentPresenterInterface.onCreateViewAreas(areaSearch.getText().toString());
+        areaSearch.setText("");
+        homePageFragmentPresenterInterface.onCreateViewIngredients(ingredientsSearch.getText().toString());
+        ingredientsSearch.setText("");
         categorySearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -109,9 +118,41 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
             }
         });
 
+        areaSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        homePageFragmentPresenterInterface.onCreateViewAreas();
-        homePageFragmentPresenterInterface.onCreateViewIngredients();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                homePageFragmentPresenterInterface.onCreateViewAreas(areaSearch.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        ingredientsSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                homePageFragmentPresenterInterface.onCreateViewIngredients(ingredientsSearch.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+
         return view;
     }
 
@@ -146,6 +187,13 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         categoryRecyclerView.setLayoutManager(linearLayoutManager);
         CategoriesAdapter categoriesAdapter = new CategoriesAdapter(getContext(), categoriesItemModel,this);
         categoryRecyclerView.setAdapter(categoriesAdapter);
+        if (categoriesItemModel.isEmpty()) {
+            categoryRecyclerView.setVisibility(View.INVISIBLE);
+            noResult.setVisibility(View.VISIBLE);
+        } else {
+            categoryRecyclerView.setVisibility(View.VISIBLE);
+            noResult.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -164,7 +212,7 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
 
     @Override
     public void onFailureArea(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

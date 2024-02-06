@@ -25,6 +25,18 @@
         tools:layout_editor_absoluteX="31dp"
         tools:layout_editor_absoluteY="34dp" />
 
+    <ImageView
+        android:id="@+id/free_palestine_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        app:layout_constraintEnd_toEndOf="@+id/category_recycler"
+        app:layout_constraintStart_toStartOf="@+id/category_recycler"
+        app:layout_constraintTop_toTopOf="@+id/category_recycler"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/free_palestine" />
+
 
 
     <TextView

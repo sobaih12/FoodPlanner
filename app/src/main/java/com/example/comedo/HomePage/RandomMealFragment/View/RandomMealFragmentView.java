@@ -24,6 +24,7 @@ import com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter.Sea
 import com.example.comedo.Models.IngredientWithMeasuresModel;
 import com.example.comedo.Models.MealModel;
 import com.example.comedo.R;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -47,6 +48,13 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
     IngredientsAdapter ingredientsAdapter;
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        youTubePlayerView.release();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

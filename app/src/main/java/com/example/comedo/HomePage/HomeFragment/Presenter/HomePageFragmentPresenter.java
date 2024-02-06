@@ -77,8 +77,8 @@ public class HomePageFragmentPresenter implements HomePageFragmentPresenterInter
     public void onCreateViewCategories(String searchText) {
         retrofit = new Retrofit.Builder().baseUrl(baseUrl).addCallAdapterFactory(RxJava3CallAdapterFactory.create()).addConverterFactory(GsonConverterFactory.create()).build();
         categoriesApiService = retrofit.create(CategoriesApiService.class);
-        Single<CategoriesItemListModel> call1 = categoriesApiService.getCategories();
-        call1.subscribeOn(Schedulers.io())
+        Single<CategoriesItemListModel> categoriesSingle = categoriesApiService.getCategories();
+        categoriesSingle.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<CategoriesItemListModel>() {
                     @Override
@@ -122,42 +122,76 @@ public class HomePageFragmentPresenter implements HomePageFragmentPresenterInter
     }
 
     @Override
-    public void onCreateViewAreas() {
-        retrofit = new Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create()).build();
+    public void onCreateViewAreas(String areaSearch) {
+        retrofit = new Retrofit.Builder().baseUrl(baseUrl).addCallAdapterFactory(RxJava3CallAdapterFactory.create()).addConverterFactory(GsonConverterFactory.create()).build();
         categoriesApiService = retrofit.create(CategoriesApiService.class);
-        Call<RootArea> call1 = categoriesApiService.getAreas();
-        call1.enqueue(new Callback<RootArea>() {
-            @Override
-            public void onResponse(Call<RootArea> call, Response<RootArea> response) {
-                areaModels = response.body().getAreas();
-                homePageFragmentInterface.onSuccessArea(areaModels);
-            }
+        Single<RootArea> categoriesSingle = categoriesApiService.getAreas();
+        categoriesSingle.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<RootArea>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
 
-            @Override
-            public void onFailure(Call<RootArea> call, Throwable t) {
-                homePageFragmentInterface.onFailureArea(t.getMessage());
+                    }
 
-            }
-        });
+                    @Override
+                    public void onSuccess(@NonNull RootArea categoriesItemListModel) {
+                        Observable.fromIterable(categoriesItemListModel.getAreas())
+                                .filter(category -> category.getStrArea().toLowerCase().contains(areaSearch))
+                                .collect(Collectors.toList())
+                                .subscribe(filteredMeals -> {
+                                    homePageFragmentInterface.onSuccessArea(filteredMeals);
+                                });
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.i("TAG", "onError: "+e.getMessage());
+                    }
+                });
+
+//        call1.enqueue(new Callback<RootArea>() {
+//            @Override
+//            public void onResponse(Call<RootArea> call, Response<RootArea> response) {
+//                areaModels = response.body().getAreas();
+//                homePageFragmentInterface.onSuccessArea(areaModels);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<RootArea> call, Throwable t) {
+//                homePageFragmentInterface.onFailureArea(t.getMessage());
+//
+//            }
+//        });
     }
 
     @Override
-    public void onCreateViewIngredients() {
-        retrofit = new Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create()).build();
+    public void onCreateViewIngredients(String ingredientSearch) {
+        retrofit = new Retrofit.Builder().baseUrl(baseUrl).addCallAdapterFactory(RxJava3CallAdapterFactory.create()).addConverterFactory(GsonConverterFactory.create()).build();
         categoriesApiService = retrofit.create(CategoriesApiService.class);
-        Call<RootIngredient> call1 = categoriesApiService.getIngredients();
-        call1.enqueue(new Callback<RootIngredient>() {
-            @Override
-            public void onResponse(Call<RootIngredient> call, Response<RootIngredient> response) {
-                ingredientsModels = response.body().getIngredients();
-                homePageFragmentInterface.onSuccessIngredients(ingredientsModels);
-            }
+        Single<RootIngredient> categoriesSingle = categoriesApiService.getIngredients();
+        categoriesSingle.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<RootIngredient>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
 
-            @Override
-            public void onFailure(Call<RootIngredient> call, Throwable t) {
-                homePageFragmentInterface.onFailureIngredients(t.getMessage());
+                    }
 
-            }
-        });
+                    @Override
+                    public void onSuccess(@NonNull RootIngredient categoriesItemListModel) {
+                        Observable.fromIterable(categoriesItemListModel.getIngredients())
+                                .filter(category -> category.getStrIngredient().toLowerCase().contains(ingredientSearch))
+                                .collect(Collectors.toList())
+                                .subscribe(filteredMeals -> {
+                                    homePageFragmentInterface.onSuccessIngredients(filteredMeals);
+                                });
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.i("TAG", "onError: "+e.getMessage());
+                    }
+                });
     }
 }

@@ -84,8 +84,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     @Override
     public int getItemCount() {
-        // Return the size of your data set
-        Log.i("TAG", "getItemCount: "+items.getMeals().size());
         return items.getMeals().size();
     }
 }
