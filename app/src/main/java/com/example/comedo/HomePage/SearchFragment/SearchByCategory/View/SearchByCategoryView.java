@@ -18,12 +18,17 @@ import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.Sea
 import com.example.comedo.Models.MealPreviewModel;
 import com.example.comedo.R;
 
+import java.util.stream.Collectors;
+
+import io.reactivex.rxjava3.core.Observable;
+
 public class SearchByCategoryView extends Fragment implements SearchByCategoryViewInterface, OnMealCategoryClickListener {
 
     SearchByCategoryPresenterInterface searchByCategoryPresenterInterface;
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerView;
     EditText searchCategoryText;
+    MealPreviewModel catItemListModel;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +54,7 @@ public class SearchByCategoryView extends Fragment implements SearchByCategoryVi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchByCategoryPresenterInterface.onViewCreatedSearchOnCategory(mealName,searchCategoryText.getText().toString());
+                onSuccessSearchByCategoryFilter(searchCategoryText.getText().toString());
             }
 
             @Override
@@ -66,12 +71,35 @@ public class SearchByCategoryView extends Fragment implements SearchByCategoryVi
 
     @Override
     public void onSuccessSearchByCategory(MealPreviewModel categoriesItemListModel) {
+        this.catItemListModel = categoriesItemListModel;
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         SearchByCategoryAdapter searchAdapter = new SearchByCategoryAdapter(categoriesItemListModel,getContext(),this);
         recyclerView.setAdapter(searchAdapter);
     }
+
+    @Override
+    public void onSuccessSearchByCategoryFilter(String filter) {
+        MealPreviewModel mealPreviewModel;
+        Observable.fromIterable(catItemListModel.getMeals())
+                .filter(meal -> meal.getStrMeal().toLowerCase().contains(filter))
+                .collect(Collectors.toList())
+                .subscribe(filteredMeals -> {
+                    linearLayoutManager = new LinearLayoutManager(getContext());
+                    linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+                    recyclerView.setLayoutManager(linearLayoutManager);
+                    SearchByCategoryAdapter searchAdapter = new SearchByCategoryAdapter(new MealPreviewModel(filteredMeals),getContext(),this);
+                    recyclerView.setAdapter(searchAdapter);
+//                    onSuccessSearchByCategory();
+                });
+//        linearLayoutManager = new LinearLayoutManager(getContext());
+//        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+//        recyclerView.setLayoutManager(linearLayoutManager);
+//        SearchByCategoryAdapter searchAdapter = new SearchByCategoryAdapter(filteredMeals,getContext(),this);
+//        recyclerView.setAdapter(searchAdapter);
+    }
+
 
     @Override
     public View getViewFromFragment() {

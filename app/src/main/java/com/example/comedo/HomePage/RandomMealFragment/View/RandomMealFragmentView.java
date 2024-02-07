@@ -1,17 +1,22 @@
 package com.example.comedo.HomePage.RandomMealFragment.View;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,15 +26,20 @@ import com.example.comedo.HomePage.RandomMealFragment.Presenter.RandomMealFragme
 import com.example.comedo.HomePage.RandomMealFragment.Presenter.RandomMealFragmentPresenterInterface;
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter.SearchPresenter;
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter.SearchPresenterInterface;
+import com.example.comedo.Models.DateFormatter;
 import com.example.comedo.Models.IngredientWithMeasuresModel;
 import com.example.comedo.Models.MealModel;
+import com.example.comedo.Models.PlanDetailsConverter;
+import com.example.comedo.Models.PlanDetailsModel;
 import com.example.comedo.R;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
+import com.example.comedo.RoomDB.MealDataBase;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -37,17 +47,14 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
 
     RandomMealFragmentPresenterInterface randomMealFragmentPresenterInterface;
     SearchPresenterInterface searchPresenterInterface;
-
-    TextView mealName;
-    TextView countryName;
-    TextView descriptionName;
-    TextView mealNameMain;
-    ImageView imageView;
+    TextView mealName,countryName,descriptionName,mealNameMain,ingredientText;
+    ImageView imageView,favoriteImage,calenderImage;
     YouTubePlayerView youTubePlayerView;
     List<IngredientWithMeasuresModel> ingredientList = new ArrayList<>();
     IngredientsAdapter ingredientsAdapter;
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
+    MealModel mealModel;
 
     @Override
     public void onPause() {
@@ -72,6 +79,10 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
         imageView = view.findViewById(R.id.meal_image_view);
         youTubePlayerView = view.findViewById(R.id.youtube_player_view);
         recyclerView = view.findViewById(R.id.ingredients_recycler_view);
+        favoriteImage = view.findViewById(R.id.favorite_meal_image_view);
+        calenderImage = view.findViewById(R.id.calendar_meal_image_view);
+
+        ingredientText = view.findViewById(R.id.ingredients_text_view);
 
         return view;
     }
@@ -81,7 +92,7 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
         super.onViewCreated(view, savedInstanceState);
 
         randomMealFragmentPresenterInterface = new RandomMealFragmentPresenter(this);
-        MealModel mealModel = RandomMealFragmentViewArgs.fromBundle(getArguments()).getMealData();
+        mealModel = RandomMealFragmentViewArgs.fromBundle(getArguments()).getMealData();
         searchPresenterInterface = new SearchPresenter(this);
 
         mealNameMain.setText(mealModel.getStrMeal());
@@ -93,9 +104,6 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .error(R.drawable.ic_launcher_background)
                 .into(imageView);
-
-
-
         youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
@@ -108,13 +116,30 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
                 }
             }
         });
-
-
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         IngredientsAdapter categoriesAdapter = new IngredientsAdapter(processMealModel(mealModel), getContext());
         recyclerView.setAdapter(categoriesAdapter);
+        favoriteImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(()->{
+                    MealDataBase.getInstance(getContext()).getMealDao().insertMeal(mealModel);
+                    Log.i("TAG", "onClick: Data Successfully Added To Room");
+                }).start();
+            }
+        });
+        calenderImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = new RandomMealFragmentView.DatePickerFragment(RandomMealFragmentView.this,mealModel);
+                newFragment.show(requireActivity().getSupportFragmentManager(), "datePicker");
+
+
+            }
+        });
+
 
 
     }
@@ -189,4 +214,43 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
 
     }
 
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener
+    {
+        RandomMealFragmentView mealFragmentView;
+        MealModel mealModel;
+        public DatePickerFragment(RandomMealFragmentView planFragment,MealModel mealModel)
+        {
+            this.mealFragmentView =planFragment;
+            this.mealModel = mealModel;
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), this, year, month, day);
+            datePickerDialog.getDatePicker().setMinDate(new Date().getTime());
+            c.add(Calendar.DAY_OF_MONTH, 7);
+            long maxDate = c.getTimeInMillis();
+            datePickerDialog.getDatePicker().setMaxDate(maxDate);
+            return datePickerDialog;
+        }
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+
+            PlanDetailsModel planDetailsModel = PlanDetailsConverter.getMealPlannerFromMealAndDate(mealModel, DateFormatter.getString(year, month, day), 0);
+            //room
+            new Thread(()->{
+                MealDataBase.getInstance(getContext()).getMealDao().insertMealPlan(planDetailsModel);
+                Log.i("TAG", "onClick: Data Successfully Added To Room");
+            }).start();
+
+            //real time database
+
+        }
+    }
 }

@@ -78,5 +78,10 @@ dependencies {
     implementation ("io.reactivex.rxjava3:rxjava:3.1.5")
     //Retrofit With RX
     implementation ("com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0")
+    //Room
+    implementation ("androidx.room:room-runtime:2.4.1")
+    annotationProcessor ("androidx.room:room-compiler:2.4.1")
+    
+
 
 }

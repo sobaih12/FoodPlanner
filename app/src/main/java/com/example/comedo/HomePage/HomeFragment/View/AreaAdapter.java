@@ -56,7 +56,12 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AreaModel item = items.get(position);
-        holder.nameTextView.setText(item.getStrArea());
+        if(item.getStrArea().equals("Unknown")){
+            holder.nameTextView.setText("Palestine");
+        }else{
+            holder.nameTextView.setText(item.getStrArea());
+
+        }
         Glide.with(context)
                 .load(items.get(position).getThumbnail())
                 .apply(new RequestOptions().override(100, 100))

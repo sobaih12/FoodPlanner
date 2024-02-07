@@ -15,16 +15,19 @@ import com.example.comedo.Models.MealListModel;
 import com.example.comedo.Models.MealModel;
 import com.example.comedo.R;
 import com.makeramen.roundedimageview.RoundedImageView;
+
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
 
-    private MealListModel items;
+    private List<MealModel> items;
     private Context context;
     OnMealClickListener listener;
 
     // Constructor to initialize the adapter with data and context
-    public SearchAdapter(MealListModel dataSet, Context context,OnMealClickListener listener) {
+    public SearchAdapter(List<MealModel> dataSet, Context context,OnMealClickListener listener) {
         this.items = dataSet;
         this.context = context;
         this.listener = listener;
@@ -63,10 +66,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         // You can also load an image into the mealImageView using a library like Glide or Picasso.
 
         // Set click listeners or any other view-related operations here.
-        MealModel item = items.getMeals().get(position);
-        holder.mealTextView.setText(items.getMeals().get(position).getStrMeal());
+        MealModel item = items.get(position);
+        holder.mealTextView.setText(items.get(position).getStrMeal());
         Glide.with(context)
-                .load(items.getMeals().get(position).getStrMealThumb())
+                .load(items.get(position).getStrMealThumb())
                 .apply(new RequestOptions().override(379, 235).centerCrop())
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .error(R.drawable.ic_launcher_background)
@@ -82,9 +85,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     }
 
-    @Override
     public int getItemCount() {
-        return items.getMeals().size();
+        if(items==null) return 0;
+        return items.size();
     }
+
+
 }
 

@@ -15,11 +15,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter.SearchPresenter;
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter.SearchPresenterInterface;
 import com.example.comedo.Models.MealListModel;
+import com.example.comedo.Models.MealModel;
 import com.example.comedo.Models.MealPreviewModel;
 import com.example.comedo.R;
+
+import java.util.List;
 
 public class SearchFragment extends Fragment implements SearchViewInterface,OnMealClickListener {
     SearchPresenterInterface searchPresenterInterface;
@@ -27,9 +31,6 @@ public class SearchFragment extends Fragment implements SearchViewInterface,OnMe
     LinearLayoutManager linearLayoutManager;
     ImageView randomImageView,noResultImage;
     EditText searchTextView;
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +59,13 @@ public class SearchFragment extends Fragment implements SearchViewInterface,OnMe
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchPresenterInterface.onViewCreatedSearch(searchTextView.getText().toString());
+//                searchPresenterInterface.onViewCreatedSearch(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                searchPresenterInterface.onViewCreatedSearch(s.toString());
 
             }
         });
@@ -72,13 +75,13 @@ public class SearchFragment extends Fragment implements SearchViewInterface,OnMe
     }
 
     @Override
-    public void onSuccessSearchByMeal(MealListModel mealListModel) {
-            linearLayoutManager = new LinearLayoutManager(requireContext());
+    public void onSuccessSearchByMeal(List<MealModel> mealListModel) {
+            linearLayoutManager = new LinearLayoutManager(getContext());
             linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
             recyclerView.setLayoutManager(linearLayoutManager);
-            SearchAdapter searchAdapter = new SearchAdapter(mealListModel,requireContext(),this);
+            SearchAdapter searchAdapter = new SearchAdapter(mealListModel,getContext(),this);
             recyclerView.setAdapter(searchAdapter);
-        if (mealListModel.getMeals().isEmpty()) {
+        if (mealListModel == null) {
             recyclerView.setVisibility(View.INVISIBLE);
             noResultImage.setVisibility(View.VISIBLE);
         } else {
@@ -89,14 +92,6 @@ public class SearchFragment extends Fragment implements SearchViewInterface,OnMe
 
     }
 
-    @Override
-    public void onSuccessSearchByCategory(MealPreviewModel categoriesItemListModel) {
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        SearchByCategoriesAdapter searchAdapter = new SearchByCategoriesAdapter(categoriesItemListModel,getContext(),this);
-        recyclerView.setAdapter(searchAdapter);
-    }
 
     @Override
     public View getViewFromFragment() {

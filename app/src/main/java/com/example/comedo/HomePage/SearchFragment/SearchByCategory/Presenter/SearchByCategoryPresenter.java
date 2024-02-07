@@ -96,17 +96,18 @@ public class SearchByCategoryPresenter implements SearchByCategoryPresenterInter
 
                     @Override
                     public void onSuccess(@NonNull MealPreviewModel categoriesItemListModel) {
-                        Observable.fromIterable(categoriesItemListModel.getMeals())
-                                .filter(meal -> meal.getStrMeal().toLowerCase().contains(searchName))
-                                .collect(Collectors.toList())
-                                .subscribe(filteredMeals -> {
-                                    Log.i("TAG", "onSuccess: filter "+filteredMeals.get(0).getStrMeal());
-                                    if (searchViewInterface != null) {
-                                        searchViewInterface.onSuccessSearchByCategory( new MealPreviewModel(filteredMeals));
-                                    } else {
-                                        Log.i("TAG", "onSuccess: searchViewInterface is null");
-                                    }
-                                });
+                        searchViewInterface.onSuccessSearchByCategory(categoriesItemListModel);
+//                        Observable.fromIterable(categoriesItemListModel.getMeals())
+//                                .filter(meal -> meal.getStrMeal().toLowerCase().contains(searchName))
+//                                .collect(Collectors.toList())
+//                                .subscribe(filteredMeals -> {
+//                                    Log.i("TAG", "onSuccess: filter "+filteredMeals.get(0).getStrMeal());
+//                                    if (searchViewInterface != null) {
+//                                        searchViewInterface.onSuccessSearchByCategory( new MealPreviewModel(filteredMeals));
+//                                    } else {
+//                                        Log.i("TAG", "onSuccess: searchViewInterface is null");
+//                                    }
+//                                });
                     }
 
                     @Override

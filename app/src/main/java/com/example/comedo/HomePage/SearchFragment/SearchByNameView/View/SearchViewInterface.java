@@ -4,10 +4,12 @@ import android.view.View;
 
 import com.example.comedo.Models.CategoriesItemListModel;
 import com.example.comedo.Models.MealListModel;
+import com.example.comedo.Models.MealModel;
 import com.example.comedo.Models.MealPreviewModel;
 
+import java.util.List;
+
 public interface SearchViewInterface {
-    void onSuccessSearchByMeal(MealListModel mealListModel);
-    void onSuccessSearchByCategory(MealPreviewModel categoriesItemListModel);
+    void onSuccessSearchByMeal(List<MealModel> mealListModel);
     View getViewFromFragment();
 }

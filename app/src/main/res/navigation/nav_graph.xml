@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/calenderFragment"
-        android:name="com.example.comedo.HomePage.CalenderFragment"
+        android:name="com.example.comedo.HomePage.CalenderFragment.CalenderFragment"
         android:label="fragment_calender"
         tools:layout="@layout/fragment_calender" />
     <fragment

@@ -70,7 +70,7 @@ public class SearchPresenter implements SearchPresenterInterface{
 
                     @Override
                     public void onSuccess(@NonNull MealListModel mealListModel) {
-                        searchViewInterface.onSuccessSearchByMeal(mealListModel);
+                        searchViewInterface.onSuccessSearchByMeal(mealListModel.getMeals());
 
                     }
 
@@ -98,40 +98,6 @@ public class SearchPresenter implements SearchPresenterInterface{
                         SearchFragmentDirections.ActionSearchFragmentToRandomMealFragment action = SearchFragmentDirections.actionSearchFragmentToRandomMealFragment(mealListModel.getMeals().get(0) );
                         Navigation.findNavController(searchViewInterface.getViewFromFragment()).navigate(action);
                         Log.i("TAG", "onSuccess: "+mealListModel.getMeals().size());
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.i("TAG", "onError: "+e.getMessage());
-                    }
-                });
-    }
-
-    @Override
-    public void onViewCreatedSearchOnCategory(String categoryName) {
-        retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-                .build();
-        searchApiService = retrofit.create(SearchApiService.class);
-        Single<MealPreviewModel> mealPreviewModelSingle = searchApiService.getSearchByCategory(categoryName);
-
-        mealPreviewModelSingle.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<MealPreviewModel>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(@NonNull MealPreviewModel categoriesItemListModel) {
-                        if (searchViewInterface != null) {
-                            searchViewInterface.onSuccessSearchByCategory(categoriesItemListModel);
-                        } else {
-                            Log.i("TAG", "onSuccess: searchViewInterface is null");
-                        }
                     }
 
                     @Override
