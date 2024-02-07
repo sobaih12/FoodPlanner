@@ -61,7 +61,6 @@ public class SearchByCategoryPresenter implements SearchByCategoryPresenterInter
                     public void onSuccess(@NonNull MealListModel mealListModel) {
                         SearchByCategoryViewDirections.ActionSearchByCategoryViewToRandomMealFragment action =
                                 SearchByCategoryViewDirections.actionSearchByCategoryViewToRandomMealFragment(mealListModel.getMeals().get(0));
-//                        SearchFragmentDirections.ActionSearchFragmentToRandomMealFragment action = SearchFragmentDirections.actionSearchFragmentToRandomMealFragment(mealListModel.getMeals().get(0) );
                         Navigation.findNavController(searchViewInterface.getViewFromFragment()).navigate(action);
                         Log.i("TAG", "onSuccess: "+mealListModel.getMeals().size());
                     }

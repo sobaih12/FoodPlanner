@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/calenderFragment"
-        android:name="com.example.comedo.HomePage.CalenderFragment.CalenderFragment"
+        android:name="com.example.comedo.HomePage.CalenderFragment.CalendarFragment"
         android:label="fragment_calender"
         tools:layout="@layout/fragment_calender" />
     <fragment
@@ -30,9 +30,13 @@
     </fragment>
     <fragment
         android:id="@+id/favouriteFragment"
-        android:name="com.example.comedo.HomePage.FavoriteFragment.FavoriteFragment"
+        android:name="com.example.comedo.HomePage.FavoriteFragment.View.FavoriteFragment"
         android:label="fragment_favourite"
-        tools:layout="@layout/fragment_favourite" />
+        tools:layout="@layout/fragment_favourite" >
+        <action
+            android:id="@+id/action_favouriteFragment_to_randomMealFragment"
+            app:destination="@id/randomMealFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.comedo.HomePage.ProfileFragment"
