@@ -29,4 +29,6 @@ public interface MealDao {
 
     @Delete
     void deleteMealPlan(PlanDetailsModel planDetailsModel);
+    @Query("SELECT * FROM PlanDetails where date=:date")
+    LiveData<List<PlanDetailsModel>> getPlanFromDate(String date);
 }
