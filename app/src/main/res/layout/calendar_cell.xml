@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout">
+
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/meal_search_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:alpha="0.8"
+        android:outlineAmbientShadowColor="@color/black"
+        android:outlineSpotShadowColor="@color/black"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_launcher_background"
+        android:tint="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:riv_border_color="@color/black"
+        app:riv_corner_radius="20dp" />
+    <TextView
+        android:id="@+id/meal_search_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:shadowRadius="20"
+        android:text="TextView"
+        android:textAlignment="textStart"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/meal_search_image_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/meal_search_image_view"
+        app:layout_constraintTop_toTopOf="@+id/meal_search_image_view" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/remove_calendar"
+        android:layout_width="60dp"
+        android:layout_height="61dp"
+        android:layout_centerInParent="true"
+        android:layout_margin="10dp"
+        app:layout_constraintRight_toRightOf="@id/meal_search_image_view"
+        app:layout_constraintTop_toTopOf="@id/meal_search_image_view"
+        android:src="@drawable/delete_svgrepo_com"
+        tools:layout_editor_absoluteX="313dp"
+        tools:layout_editor_absoluteY="48dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

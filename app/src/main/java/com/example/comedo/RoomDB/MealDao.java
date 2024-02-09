@@ -15,24 +15,21 @@ import java.util.List;
 public interface MealDao {
     @Query("SELECT * From MealDetails")
     LiveData<List<MealModel>> getAllMeals();
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertMeal(MealModel mealModel);
-
-    @Delete
-    void deleteMeal(MealModel mealModel);
     @Query("SELECT * From PlanDetails")
     LiveData<List<PlanDetailsModel>> getAllMealsPlan();
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertMealPlan(PlanDetailsModel planDetailsModel);
-
-    @Delete
-    void deleteMealPlan(PlanDetailsModel planDetailsModel);
     @Query("SELECT * FROM PlanDetails where date=:date")
     LiveData<List<PlanDetailsModel>> getPlanFromDate(String date);
     @Query("DELETE FROM PlanDetails")
     void deleteAllPlan();
     @Query("DELETE FROM MealDetails")
     void deleteAllFav();
+    @Delete
+    void deleteMeal(MealModel mealModel);
+    @Delete
+    void deleteMealPlan(PlanDetailsModel planDetailsModel);
+
 }

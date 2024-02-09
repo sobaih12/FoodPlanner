@@ -1,9 +1,11 @@
 package com.example.comedo.HomePage.CalenderFragment.View;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -12,6 +14,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.comedo.Models.PlanDetailsModel;
 import com.example.comedo.R;
+import com.example.comedo.RoomDB.MealDataBase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
@@ -23,6 +29,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Search
     private List<PlanDetailsModel> items;
     private Context context;
     OnCalendarClickListener listener;
+
 
     // Constructor to initialize the adapter with data and context
     public CalendarAdapter(List<PlanDetailsModel> dataSet, Context context, OnCalendarClickListener listener) {
@@ -37,6 +44,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Search
         TextView mealTextView;
         CircleImageView favoriteImageView;
         ConstraintLayout constraintLayout;
+        ImageView removeCalendar;
+        FirebaseDatabase firebaseDatabase;
 
         public SearchViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -45,6 +54,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Search
             mealTextView = itemView.findViewById(R.id.meal_search_text_view);
             favoriteImageView = itemView.findViewById(R.id.favorite_image_view);
             constraintLayout = itemView.findViewById(R.id.constraintLayout);
+            removeCalendar = itemView.findViewById(R.id.remove_calendar);
         }
     }
 
@@ -52,7 +62,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Search
     @Override
     public CalendarAdapter.SearchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate your search_cell layout here
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_cell, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.calendar_cell, parent, false);
         return new CalendarAdapter.SearchViewHolder(view);
     }
 
@@ -72,7 +82,19 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Search
                 listener.onCalendarClickListener(item);
             }
         });
+        holder.removeCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                DatabaseReference databaseReferenceCalendar = firebaseDatabase.getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("CalendarMeals");
+                databaseReferenceCalendar.child(item.idMeal).removeValue();
+                new Thread(()->{
+                    MealDataBase.getInstance(v.getContext()).getMealDao().deleteMealPlan(item);
+                    Log.i("TAG", "onClick: Data Successfully Deleted To Room");
+                }).start();
 
+            }
+        });
 
 
     }
