@@ -29,7 +29,7 @@ public class MealModel implements Serializable {
 	private Object strTags;
 	@PrimaryKey
 	@NonNull
-	private String idMeal;
+	public String idMeal;
 	private String strInstructions;
 	private String strIngredient1;
 	private String strIngredient3;

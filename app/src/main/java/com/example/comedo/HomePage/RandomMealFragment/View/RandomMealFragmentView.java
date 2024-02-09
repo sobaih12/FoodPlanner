@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,7 +57,7 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
     RandomMealFragmentPresenterInterface randomMealFragmentPresenterInterface;
     SearchPresenterInterface searchPresenterInterface;
     TextView mealName,countryName,descriptionName,mealNameMain,ingredientText;
-    ImageView imageView,favoriteImage,calenderImage;
+    ImageView imageView,favoriteImage,calenderImage,addedToFavorite;
     YouTubePlayerView youTubePlayerView;
     List<IngredientWithMeasuresModel> ingredientList = new ArrayList<>();
     IngredientsAdapter ingredientsAdapter;
@@ -66,6 +67,7 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
     FirebaseDatabase firebaseDatabase;
     static DatabaseReference databaseReferenceFavorite;
     static DatabaseReference databaseReferenceCalendar;
+    Boolean favFalg;
 
     @Override
     public void onPause() {
@@ -93,6 +95,7 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
         recyclerView = view.findViewById(R.id.ingredients_recycler_view);
         favoriteImage = view.findViewById(R.id.favorite_meal_image_view);
         calenderImage = view.findViewById(R.id.calendar_meal_image_view);
+        addedToFavorite = view.findViewById(R.id.added_to_favorite);
 
 
         ingredientText = view.findViewById(R.id.ingredients_text_view);
@@ -104,62 +107,112 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        randomMealFragmentPresenterInterface = new RandomMealFragmentPresenter(this);
-        mealModel = RandomMealFragmentViewArgs.fromBundle(getArguments()).getMealData();
-        searchPresenterInterface = new SearchPresenter(this);
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReferenceFavorite = firebaseDatabase.getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("FavoriteMeals").child(mealModel.getIdMeal());
-        databaseReferenceCalendar = firebaseDatabase.getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("CalendarMeals").child(mealModel.getIdMeal());
 
-
-        mealNameMain.setText(mealModel.getStrMeal());
-        mealName.setText(mealModel.getStrMeal());
-        countryName.setText("  "+mealModel.getStrArea()+"  ");
-        descriptionName.setText(mealModel.getStrInstructions());
-        Glide.with(getContext()).load(mealModel.getStrMealThumb())
-                .apply(new RequestOptions().override(379, 235).centerCrop())
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .error(R.drawable.ic_launcher_background)
-                .into(imageView);
-        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-            @Override
-            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                String videoId = getId(mealModel.getStrYoutube());
-                if (videoId == ""){
-                    youTubePlayerView.release();
+        if(FirebaseAuth.getInstance().getUid() == null){
+            randomMealFragmentPresenterInterface = new RandomMealFragmentPresenter(this);
+            mealModel = RandomMealFragmentViewArgs.fromBundle(getArguments()).getMealData();
+            searchPresenterInterface = new SearchPresenter(this);
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            mealNameMain.setText(mealModel.getStrMeal());
+            mealName.setText(mealModel.getStrMeal());
+            countryName.setText("  "+mealModel.getStrArea()+"  ");
+            descriptionName.setText(mealModel.getStrInstructions());
+            Glide.with(getContext()).load(mealModel.getStrMealThumb())
+                    .apply(new RequestOptions().override(379, 235).centerCrop())
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .error(R.drawable.ic_launcher_background)
+                    .into(imageView);
+            youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                @Override
+                public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                    String videoId = getId(mealModel.getStrYoutube());
+                    if (videoId == ""){
+                        youTubePlayerView.release();
+                    }
+                    else{
+                        youTubePlayer.cueVideo(videoId,0);
+                    }
                 }
-                else{
-                    youTubePlayer.cueVideo(videoId,0);
+            });
+            favoriteImage.setVisibility(View.GONE);
+            addedToFavorite.setVisibility(View.GONE);
+            calenderImage.setVisibility(View.GONE);
+            linearLayoutManager = new LinearLayoutManager(getContext());
+            linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+            recyclerView.setLayoutManager(linearLayoutManager);
+            IngredientsAdapter ingredientsAdapter1 = new IngredientsAdapter(processMealModel(mealModel), getContext());
+            recyclerView.setAdapter(ingredientsAdapter1);
+
+        }else{
+            randomMealFragmentPresenterInterface = new RandomMealFragmentPresenter(this);
+            mealModel = RandomMealFragmentViewArgs.fromBundle(getArguments()).getMealData();
+            searchPresenterInterface = new SearchPresenter(this);
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            databaseReferenceFavorite = firebaseDatabase.getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("FavoriteMeals").child(mealModel.getIdMeal());
+            databaseReferenceCalendar = firebaseDatabase.getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("CalendarMeals").child(mealModel.getIdMeal());
+
+            getMealFromId(mealModel.idMeal);
+            mealNameMain.setText(mealModel.getStrMeal());
+            mealName.setText(mealModel.getStrMeal());
+            countryName.setText("  "+mealModel.getStrArea()+"  ");
+            descriptionName.setText(mealModel.getStrInstructions());
+            Glide.with(getContext()).load(mealModel.getStrMealThumb())
+                    .apply(new RequestOptions().override(379, 235).centerCrop())
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .error(R.drawable.ic_launcher_background)
+                    .into(imageView);
+            youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                @Override
+                public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                    String videoId = getId(mealModel.getStrYoutube());
+                    if (videoId == ""){
+                        youTubePlayerView.release();
+                    }
+                    else{
+                        youTubePlayer.cueVideo(videoId,0);
+                    }
                 }
-            }
-        });
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        IngredientsAdapter categoriesAdapter = new IngredientsAdapter(processMealModel(mealModel), getContext());
-        recyclerView.setAdapter(categoriesAdapter);
-        favoriteImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Room
-                new Thread(()->{
-                    MealDataBase.getInstance(getContext()).getMealDao().insertMeal(mealModel);
-                    Log.i("TAG", "onClick: Data Successfully Added To Room");
-                }).start();
-                //RealTime
-                databaseReferenceFavorite.setValue(mealModel);
+            });
+            linearLayoutManager = new LinearLayoutManager(getContext());
+            linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+            recyclerView.setLayoutManager(linearLayoutManager);
+            IngredientsAdapter categoriesAdapter = new IngredientsAdapter(processMealModel(mealModel), getContext());
+            recyclerView.setAdapter(categoriesAdapter);
+            favoriteImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Room
+                    new Thread(()->{
+                        MealDataBase.getInstance(getContext()).getMealDao().insertMeal(mealModel);
+                        Log.i("TAG", "onClick: Data Successfully Added To Room");
+                    }).start();
+                    //RealTime
+                    databaseReferenceFavorite.setValue(mealModel);
 
-            }
-        });
-        calenderImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = new RandomMealFragmentView.DatePickerFragment(RandomMealFragmentView.this,mealModel);
-                newFragment.show(requireActivity().getSupportFragmentManager(), "datePicker");
+                }
+            });
+            calenderImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogFragment newFragment = new RandomMealFragmentView.DatePickerFragment(RandomMealFragmentView.this,mealModel);
+                    newFragment.show(requireActivity().getSupportFragmentManager(), "datePicker");
 
 
-            }
-        });
+                }
+            });
+            addedToFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    DatabaseReference databaseReferenceCalendar = firebaseDatabase.getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("FavoriteMeals");
+                    databaseReferenceCalendar.child(mealModel.idMeal).removeValue();
+                    new Thread(()->{
+                        MealDataBase.getInstance(v.getContext()).getMealDao().deleteMeal(mealModel);
+                        Log.i("TAG", "onClick: Data Successfully Deleted To Room");
+                    }).start();
+                }
+            });
+        }
 
 
 
@@ -327,6 +380,23 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
             //real time database
             RandomMealFragmentView.databaseReferenceCalendar.setValue(planDetailsModel);
         }
+    }
+    public void getMealFromId(String id){
+        MealDataBase.getInstance(getContext()).getMealDao().getMealsById(id)
+        .observe(getViewLifecycleOwner(), new Observer<List<MealModel>>() {
+            @Override
+            public void onChanged(List<MealModel> mealsItems) {
+                if(mealsItems != null && !mealsItems.isEmpty()){
+                    favFalg = true;
+                    favoriteImage.setVisibility(View.GONE);
+                    addedToFavorite.setVisibility(View.VISIBLE);
+                }else{
+                    favFalg = false;
+                    addedToFavorite.setVisibility(View.GONE);
+                    favoriteImage.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
 }

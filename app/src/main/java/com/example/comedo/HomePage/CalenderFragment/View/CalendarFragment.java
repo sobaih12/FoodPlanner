@@ -65,8 +65,7 @@ public class CalendarFragment extends Fragment implements OnCalendarClickListene
         return view;
     }
 
-    void setViews(String date)
-    {
+    void setViews(String date) {
         MealDataBase.getInstance(getContext()).getMealDao().getPlanFromDate(date)
                 .observe(getViewLifecycleOwner(), new Observer<List<PlanDetailsModel>>() {
                     @Override

@@ -70,6 +70,18 @@
             android:src="@drawable/favorite_border"
             app:layout_constraintRight_toRightOf="@id/meal_image_view"
             app:layout_constraintTop_toTopOf="@id/meal_image_view" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/added_to_favorite"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="124dp"
+            android:src="@drawable/favorite_icon"
+            android:visibility="gone"
+            app:layout_constraintRight_toRightOf="@id/meal_image_view"
+            app:layout_constraintTop_toTopOf="@id/meal_image_view" />
 
         <TextView
             android:id="@+id/meal_name_text_view"

@@ -31,5 +31,7 @@ public interface MealDao {
     void deleteMeal(MealModel mealModel);
     @Delete
     void deleteMealPlan(PlanDetailsModel planDetailsModel);
+    @Query("SELECT * FROM MealDetails WHERE idMeal= :id")
+    LiveData<List<MealModel>> getMealsById(String id);
 
 }

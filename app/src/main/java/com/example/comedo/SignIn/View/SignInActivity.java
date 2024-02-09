@@ -46,15 +46,14 @@ import com.google.android.gms.tasks.Task;
 
 public class SignInActivity extends AppCompatActivity implements SignInViewInterface{
 
-    static String TAG = "TAG";
     EditText emailText;
     EditText passwordText;
-    Button signInButton,googleSignIN;
+    Button signInButton,googleSignIN,guestMode;
     TextView signUpLink;
     SignInPresenterInterface signInPresenterInterface;
     GoogleSignInClient googleSignInClient;
-    ShapeableImageView imageView;
     FirebaseAuth auth;
+    public static Boolean isGuestMode = false;
 
 
     @Override
@@ -62,7 +61,6 @@ public class SignInActivity extends AppCompatActivity implements SignInViewInter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         auth = FirebaseAuth.getInstance();
-//        FirebaseApp.initializeApp(this);
         GoogleSignInOptions signInOptions = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("86288114919-vp6d9tqi4ujbkd0oj5beunb8u4kmsboa.apps.googleusercontent.com")
@@ -70,12 +68,21 @@ public class SignInActivity extends AppCompatActivity implements SignInViewInter
         googleSignInClient = GoogleSignIn.getClient(SignInActivity.this,signInOptions);
 
         googleSignIN = findViewById(R.id.google_botton);
+        guestMode = findViewById(R.id.guest_button);
         googleSignIN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = googleSignInClient.getSignInIntent();
                 startActivityForResult(intent,100);
-                
+                isGuestMode = false;
+            }
+        });
+        guestMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isGuestMode = true;
+                Intent intent = new Intent(SignInActivity.this, HomePageActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -88,6 +95,7 @@ public class SignInActivity extends AppCompatActivity implements SignInViewInter
         signUpLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isGuestMode = false;
                 Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
                 startActivity(intent);
                 finish();
@@ -97,6 +105,7 @@ public class SignInActivity extends AppCompatActivity implements SignInViewInter
 
             @Override
             public void onClick(View v) {
+                isGuestMode = false;
                 getSignIn();
             }
         });
@@ -136,10 +145,7 @@ public class SignInActivity extends AppCompatActivity implements SignInViewInter
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode != RESULT_CANCELED) {
             if (requestCode == 100) {
-                Log.i(TAG, "onActivityResult: ============================" + GoogleSignIn.getSignedInAccountFromIntent(data).getResult().toString());
                 Task<GoogleSignInAccount> signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
-                Log.i(TAG, "onActivityResult: ============================" + signInAccountTask.getResult().getDisplayName());
-
                 if (signInAccountTask.isSuccessful()) {
 
                     String s = "Google sign in successful";
@@ -165,11 +171,7 @@ public class SignInActivity extends AppCompatActivity implements SignInViewInter
                     } catch (ApiException e) {
                         e.printStackTrace();
                     }
-                } else {
-                    Toast.makeText(this, "mike", Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                Toast.makeText(this, "michael hena", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -178,30 +180,4 @@ public class SignInActivity extends AppCompatActivity implements SignInViewInter
     public void showToast() {
         Toast.makeText(this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
     }
-//    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-//        @Override
-//        public void onActivityResult(ActivityResult activityResult) {
-//            if (activityResult.getResultCode() == RESULT_OK){
-//
-//                Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(activityResult.getData());
-//                try {
-//                    GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
-//                    AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(),null);
-//                    auth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<AuthResult> task) {
-//                            if(task.isSuccessful()){
-//                                auth = FirebaseAuth.getInstance();
-//                                Intent intent = new Intent(SignInActivity.this,HomePageActivity.class);
-//                                startActivity(intent);
-//                            }
-//                        }
-//                    });
-//                } catch (ApiException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        }
-//    });
 }
