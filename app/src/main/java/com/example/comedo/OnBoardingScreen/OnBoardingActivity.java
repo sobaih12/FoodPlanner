@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.comedo.R;
 import com.example.comedo.SignIn.View.SignInActivity;
+import com.example.comedo.SplashScreen.PreferenceManager;
 import com.ramotion.paperonboarding.PaperOnboardingFragment;
 import com.ramotion.paperonboarding.PaperOnboardingPage;
 
@@ -30,6 +31,8 @@ public class OnBoardingActivity extends AppCompatActivity {
         skipTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PreferenceManager.setOnboardingCompleted(OnBoardingActivity.this, true);
+
                 Intent intent = new Intent(OnBoardingActivity.this,SignInActivity.class);
                 startActivity(intent);
             }

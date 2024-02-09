@@ -2,11 +2,14 @@ package com.example.comedo.SignIn.Presenter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.comedo.HomePage.FavoriteFragment.View.FavoriteFragment;
 import com.example.comedo.HomePage.HomePageActivity;
+import com.example.comedo.HomePage.RandomMealFragment.View.RandomMealFragmentView;
 import com.example.comedo.SignIn.View.SignInActivity;
 import com.example.comedo.SignIn.View.SignInViewInterface;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,6 +41,8 @@ public class SignInPresenter implements SignInPresenterInterface{
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 signInViewInterface.successSignUp();
+                                Log.i("TAG", "onComplete: Mostafa");
+                                RandomMealFragmentView.onGetDataFromRealTime();
                             } else {
                                 signInViewInterface.failedSignUp(task.getException().getMessage());
                             }

@@ -1,7 +1,9 @@
 package com.example.comedo.HomePage.RandomMealFragment.View;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,6 +35,12 @@ import com.example.comedo.Models.PlanDetailsConverter;
 import com.example.comedo.Models.PlanDetailsModel;
 import com.example.comedo.R;
 import com.example.comedo.RoomDB.MealDataBase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -55,6 +63,9 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
     MealModel mealModel;
+    FirebaseDatabase firebaseDatabase;
+    static DatabaseReference databaseReferenceFavorite;
+    static DatabaseReference databaseReferenceCalendar;
 
     @Override
     public void onPause() {
@@ -72,6 +83,7 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
                              Bundle savedInstanceState) {
         View view;
         view = inflater.inflate(R.layout.fragment_random_meal, container, false);
+
         mealNameMain = view.findViewById(R.id.meal_name_text_view_2);
         mealName = view.findViewById(R.id.meal_name_text_view);
         countryName = view.findViewById(R.id.country_text_view);
@@ -81,6 +93,7 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
         recyclerView = view.findViewById(R.id.ingredients_recycler_view);
         favoriteImage = view.findViewById(R.id.favorite_meal_image_view);
         calenderImage = view.findViewById(R.id.calendar_meal_image_view);
+
 
         ingredientText = view.findViewById(R.id.ingredients_text_view);
 
@@ -94,6 +107,10 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
         randomMealFragmentPresenterInterface = new RandomMealFragmentPresenter(this);
         mealModel = RandomMealFragmentViewArgs.fromBundle(getArguments()).getMealData();
         searchPresenterInterface = new SearchPresenter(this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReferenceFavorite = firebaseDatabase.getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("FavoriteMeals").child(mealModel.getIdMeal());
+        databaseReferenceCalendar = firebaseDatabase.getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("CalendarMeals").child(mealModel.getIdMeal());
+
 
         mealNameMain.setText(mealModel.getStrMeal());
         mealName.setText(mealModel.getStrMeal());
@@ -124,10 +141,14 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
         favoriteImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Room
                 new Thread(()->{
                     MealDataBase.getInstance(getContext()).getMealDao().insertMeal(mealModel);
                     Log.i("TAG", "onClick: Data Successfully Added To Room");
                 }).start();
+                //RealTime
+                databaseReferenceFavorite.setValue(mealModel);
+
             }
         });
         calenderImage.setOnClickListener(new View.OnClickListener() {
@@ -143,6 +164,60 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
 
 
     }
+    Context getContextInFragment(){
+        Context context;
+        context = getContext();
+        return context;
+    }
+    public static void onGetDataFromRealTime() {
+        RandomMealFragmentView randomMealFragmentView = new RandomMealFragmentView();
+        DatabaseReference databaseReferenceFavorite = FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("FavoriteMeals");
+        databaseReferenceFavorite.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SuspiciousIndentation")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<MealModel> mealModelList = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    // Assuming each child under "favorite" node is a MealModel object
+                    MealModel mealModel = dataSnapshot.getValue(MealModel.class);
+                    mealModelList.add(mealModel);
+                }
+                new Thread(()->{
+                    for(int i=0;i<mealModelList.size();i++)
+                    MealDataBase.getInstance(randomMealFragmentView.getContextInFragment()).getMealDao().insertMeal(mealModelList.get(i));
+                }).start();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.i("TAG", "onCancelled: " + error.getMessage());
+            }
+        });
+
+        DatabaseReference databaseReferenceCalendar = FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("CalendarMeals");
+        databaseReferenceCalendar.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<PlanDetailsModel> planDetailsModelList = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    // Assuming each child under "calendar" node is a PlanDetailsModel object
+                    PlanDetailsModel planDetailsModel = dataSnapshot.getValue(PlanDetailsModel.class);
+                    planDetailsModelList.add(planDetailsModel);
+                }
+                new Thread(()->{
+                    for(int i=0;i<planDetailsModelList.size();i++)
+                        MealDataBase.getInstance(randomMealFragmentView.getContextInFragment()).getMealDao().insertMealPlan(planDetailsModelList.get(i));
+                }).start();
+                // Do something with the retrieved PlanDetailsModel list
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.i("TAG", "onCancelled: " + error.getMessage());
+            }
+        });
+    }
+
     public static List<IngredientWithMeasuresModel> processMealModel(MealModel mealModel) {
         List<IngredientWithMeasuresModel> ingredientList = new ArrayList<>();
 
@@ -245,12 +320,13 @@ public class RandomMealFragmentView extends Fragment implements RandomMealFragme
             PlanDetailsModel planDetailsModel = PlanDetailsConverter.getMealPlannerFromMealAndDate(mealModel, DateFormatter.getString(year, month, day), 0);
             //room
             new Thread(()->{
-                MealDataBase.getInstance(getContext()).getMealDao().insertMealPlan(planDetailsModel);
+                MealDataBase.getInstance(getActivity()).getMealDao().insertMealPlan(planDetailsModel);
                 Log.i("TAG", "onClick: Data Successfully Added To Room");
             }).start();
 
             //real time database
-
+            RandomMealFragmentView.databaseReferenceCalendar.setValue(planDetailsModel);
         }
     }
+
 }

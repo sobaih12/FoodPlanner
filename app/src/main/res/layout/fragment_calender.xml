@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout7"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomePage.CalenderFragment.CalendarFragment">
+    tools:context=".HomePage.CalenderFragment.View.CalendarFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/calendar_recycler"

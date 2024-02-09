@@ -72,7 +72,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Search
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onFavoriteClickListener(item.getStrMeal());
+                listener.onFavoriteClickListener(item);
             }
         });
 

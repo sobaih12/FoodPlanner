@@ -56,7 +56,7 @@ public class PlanDetailsConverter {
             planDetailsModel.id = date + "-" + mealDto.getIdMeal();
             return planDetailsModel;
         }
-        public static MealModel getMealFromMealPlanner(PlanDetailsModel planDetailsModel){
+         public static MealModel getMealFromMealPlanner(PlanDetailsModel planDetailsModel){
             MealModel mealDto = new MealModel();
             mealDto.setIdMeal(planDetailsModel.idMeal);
             mealDto.setStrMeal(planDetailsModel.strMeal);
@@ -108,5 +108,4 @@ public class PlanDetailsConverter {
             mealDto.setStrMeasure20(planDetailsModel.strMeasure20);
             return mealDto;
         }
-
 }

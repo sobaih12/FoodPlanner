@@ -48,11 +48,13 @@ dependencies {
     implementation ("androidx.navigation:navigation-ui:2.5.3")
     // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
+    implementation("com.google.firebase:firebase-database")
 
     // Add the dependency for the Firebase Authentication library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-auth")
     implementation ("com.google.firebase:firebase-auth:22.0.0")
+    implementation("com.google.firebase:firebase-analytics")
     //Glide
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
@@ -81,7 +83,10 @@ dependencies {
     //Room
     implementation ("androidx.room:room-runtime:2.4.1")
     annotationProcessor ("androidx.room:room-compiler:2.4.1")
-    
+    //Google Auth
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
 
 
 }

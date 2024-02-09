@@ -7,9 +7,13 @@
 
     <fragment
         android:id="@+id/calenderFragment"
-        android:name="com.example.comedo.HomePage.CalenderFragment.CalendarFragment"
+        android:name="com.example.comedo.HomePage.CalenderFragment.View.CalendarFragment"
         android:label="fragment_calender"
-        tools:layout="@layout/fragment_calender" />
+        tools:layout="@layout/fragment_calender" >
+        <action
+            android:id="@+id/action_calenderFragment_to_randomMealFragment"
+            app:destination="@id/randomMealFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homePageFragment"
         android:name="com.example.comedo.HomePage.HomeFragment.View.HomePageFragment"

@@ -49,9 +49,9 @@ public class FavoritePresenter implements FavoritePresenterInterface{
 
                     @Override
                     public void onSuccess(@NonNull MealListModel mealListModel) {
-                        FavoriteFragmentDirections.ActionFavouriteFragmentToRandomMealFragment action =
-                                FavoriteFragmentDirections.actionFavouriteFragmentToRandomMealFragment(mealListModel.getMeals().get(0));
-                        Navigation.findNavController(favoriteFragmentInterface.getViewFromFragment()).navigate(action);
+//                        FavoriteFragmentDirections.ActionFavouriteFragmentToRandomMealFragment action =
+//                                FavoriteFragmentDirections.actionFavouriteFragmentToRandomMealFragment(mealListModel.getMeals().get(0));
+//                        Navigation.findNavController(favoriteFragmentInterface.getViewFromFragment()).navigate(action);
                         Log.i("TAG", "onSuccess: "+mealListModel.getMeals().size());
                     }
 

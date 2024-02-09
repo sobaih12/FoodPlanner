@@ -21,13 +21,16 @@ public class SplashActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_splash);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashActivity.this, OnBoardingActivity.class);
-                startActivity(intent);
-                finish();
+        new Handler().postDelayed(() -> {
+            boolean onboardingCompleted = PreferenceManager.isOnboardingCompleted(this);
+            Intent intent;
+            if (onboardingCompleted) {
+                intent = new Intent(SplashActivity.this, SignInActivity.class);
+            } else {
+                intent = new Intent(SplashActivity.this, OnBoardingActivity.class);
             }
+            startActivity(intent);
+            finish();
         }, 3000);
     }
 }
