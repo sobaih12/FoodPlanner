@@ -1,13 +1,8 @@
 package com.example.comedo.HomePage.SearchFragment.SearchByNameView.View;
 
-import android.database.Observable;
-
-import com.example.comedo.Models.CategoriesItemListModel;
 import com.example.comedo.Models.MealListModel;
 import com.example.comedo.Models.MealPreviewModel;
-
 import io.reactivex.rxjava3.core.Single;
-import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 

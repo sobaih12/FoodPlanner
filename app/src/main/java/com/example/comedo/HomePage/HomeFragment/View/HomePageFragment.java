@@ -1,11 +1,12 @@
 package com.example.comedo.HomePage.HomeFragment.View;
 
-import android.content.Context;
+
 import android.os.Bundle;
 
 import com.example.comedo.HomePage.HomeFragment.Presenter.HomePageFragmentPresenter;
 import com.example.comedo.HomePage.HomeFragment.Presenter.HomePageFragmentPresenterInterface;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -29,10 +30,11 @@ import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.Sea
 import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.SearchByCategoryPresenterInterface;
 import com.example.comedo.HomePage.SearchFragment.SearchByIngredients.Presenter.SearchByIngredientsPresenter;
 import com.example.comedo.HomePage.SearchFragment.SearchByIngredients.Presenter.SearchByIngredientsPresenterInterface;
-import com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter.SearchPresenterInterface;
+
 import com.example.comedo.Models.AreaModel;
 import com.example.comedo.Models.CategoriesItemModel;
 import com.example.comedo.Models.IngredientModel;
+import com.example.comedo.Models.InternetConnection;
 import com.example.comedo.Models.MealModel;
 import com.example.comedo.R;
 
@@ -40,18 +42,12 @@ import java.util.List;
 
 
 public class HomePageFragment extends Fragment implements HomePageFragmentInterface,OnCategoryClickListener ,OnAreaClickListener,OnIngredientsClickListener{
-
-
-    Context context ;
-
-    CategoriesApiService categoriesApiService;
-
     RecyclerView categoryRecyclerView,areaRecycler,ingredientsRecycler;
     LinearLayoutManager linearLayoutManager;
-    ImageView randomImageView,noResult;
+    ImageView randomImageView;
     TextView randomTextView;
     EditText categorySearch,areaSearch,ingredientsSearch;
-
+    ConstraintLayout noResultCategory,noResultCountry, noResultIngredients;
 
 
     HomePageFragmentPresenterInterface homePageFragmentPresenterInterface;
@@ -81,6 +77,7 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
                              Bundle savedInstanceState) {
         View view;
         view =  inflater.inflate(R.layout.fragment_home_page, container, false);
+
         homePageFragmentPresenterInterface =  new HomePageFragmentPresenter(this);
         searchByCategoryPresenterInterface = new SearchByCategoryPresenter(this);
         searchByAreaPresenterInterface = new SearchByAreaPresenter(this);
@@ -88,12 +85,14 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         categoryRecyclerView = view.findViewById(R.id.category_recycler);
         areaRecycler = view.findViewById(R.id.area_recycler);
         ingredientsRecycler = view.findViewById(R.id.ingredients_recycler);
-        noResult = view.findViewById(R.id.free_palestine_image_view);
         randomImageView = view.findViewById(R.id.meal_image_view);
         randomTextView = view.findViewById(R.id.random_text_view);
         categorySearch = view.findViewById(R.id.category_search_edit_text);
         areaSearch = view.findViewById(R.id.country_search_edit_text);
         ingredientsSearch = view.findViewById(R.id.search_ingredients_edit_text);
+        noResultCountry = view.findViewById(R.id.country_no_result);
+        noResultCategory = view.findViewById(R.id.category_no_result);
+        noResultIngredients = view.findViewById(R.id.no_result_ingredients);
         homePageFragmentPresenterInterface.onCreateViewRandomMeal();
         homePageFragmentPresenterInterface.onCreateViewCategories(categorySearch.getText().toString());
         categorySearch.setText("");
@@ -152,7 +151,6 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         });
 
 
-
         return view;
     }
 
@@ -176,11 +174,6 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
     }
 
     @Override
-    public void onFailureRandomMeal(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void onSuccessCategories(List<CategoriesItemModel> categoriesItemModel) {
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -189,18 +182,12 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         categoryRecyclerView.setAdapter(categoriesAdapter);
         if (categoriesItemModel.isEmpty()) {
             categoryRecyclerView.setVisibility(View.INVISIBLE);
-            noResult.setVisibility(View.VISIBLE);
+            noResultCategory.setVisibility(View.VISIBLE);
         } else {
             categoryRecyclerView.setVisibility(View.VISIBLE);
-            noResult.setVisibility(View.GONE);
+            noResultCategory.setVisibility(View.GONE);
         }
     }
-
-    @Override
-    public void onFailureCategories(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public void onSuccessArea(List<AreaModel> areaModels) {
         linearLayoutManager = new LinearLayoutManager(getContext());
@@ -208,11 +195,13 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         areaRecycler.setLayoutManager(linearLayoutManager);
         AreaAdapter areaAdapter = new AreaAdapter(getContext(), areaModels,this);
         areaRecycler.setAdapter(areaAdapter);
-    }
-
-    @Override
-    public void onFailureArea(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        if (areaModels.isEmpty()) {
+            areaRecycler.setVisibility(View.INVISIBLE);
+            noResultCountry.setVisibility(View.VISIBLE);
+        } else {
+            areaRecycler.setVisibility(View.VISIBLE);
+            noResultCountry.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -222,11 +211,13 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         ingredientsRecycler.setLayoutManager(linearLayoutManager);
         HomeIngredientsAdapter areaAdapter = new HomeIngredientsAdapter(getContext(), ingredientModels,this);
         ingredientsRecycler.setAdapter(areaAdapter);
-    }
-
-    @Override
-    public void onFailureIngredients(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        if (ingredientModels.isEmpty()) {
+            ingredientsRecycler.setVisibility(View.INVISIBLE);
+            noResultIngredients.setVisibility(View.VISIBLE);
+        } else {
+            ingredientsRecycler.setVisibility(View.VISIBLE);
+            noResultIngredients.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -235,11 +226,6 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
                 HomePageFragmentDirections.actionHomePageFragmentToSearchByCategoryView(categoryName);
         action.setCategoryName(categoryName);
         Navigation.findNavController(requireView()).navigate(action);
-    }
-    public  View onView(){
-        View view;
-        view = getView();
-        return view;
     }
 
     @Override
@@ -252,7 +238,6 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
 
     @Override
     public void onIngredientsClickListener(String ingredientsName) {
-//        Toast.makeText(getContext(),ingredientsName, Toast.LENGTH_SHORT).show();
         HomePageFragmentDirections.ActionHomePageFragmentToSearchByIngredientsView action =
                 HomePageFragmentDirections.actionHomePageFragmentToSearchByIngredientsView(ingredientsName);
         action.setIngredientName(ingredientsName);

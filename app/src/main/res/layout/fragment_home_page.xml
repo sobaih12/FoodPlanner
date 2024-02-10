@@ -6,42 +6,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomePage.HomeFragment.View.HomePageFragment">
+
+
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
         android:id="@+id/daily_meal_text_view"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:text="Daily Meal"
+        android:text="Random Meal"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginStart="10dp"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="10dp"
-
+        android:textColor="@color/colorBlue"
         tools:layout_editor_absoluteX="31dp"
         tools:layout_editor_absoluteY="34dp" />
-
-    <ImageView
-        android:id="@+id/free_palestine_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        app:layout_constraintEnd_toEndOf="@+id/category_recycler"
-        app:layout_constraintStart_toStartOf="@+id/category_recycler"
-        app:layout_constraintTop_toTopOf="@+id/category_recycler"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/free_palestine" />
-
 
 
     <TextView
         android:id="@+id/category_text_view"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:text="Category"
@@ -50,12 +40,12 @@
         android:layout_marginStart="10dp"
         app:layout_constraintTop_toBottomOf="@id/meal_image_view"
         android:layout_marginTop="20dp"
-
+        android:textColor="@color/colorBlue"
         tools:layout_editor_absoluteX="31dp"
         tools:layout_editor_absoluteY="34dp" />
     <TextView
         android:id="@+id/ingredients_text_view"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:text="Ingredients"
@@ -64,7 +54,7 @@
         android:layout_marginStart="10dp"
         app:layout_constraintTop_toBottomOf="@id/area_recycler"
         android:layout_marginTop="20dp"
-
+        android:textColor="@color/colorBlue"
         tools:layout_editor_absoluteX="31dp"
         tools:layout_editor_absoluteY="34dp" />
 
@@ -72,7 +62,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ingredients_recycler"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="160dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
@@ -80,12 +70,34 @@
         app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="@id/meal_image_view"
         app:layout_constraintTop_toBottomOf="@+id/ingredients_text_view" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/no_result_ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="@id/meal_image_view"
+        app:layout_constraintHorizontal_bias="0.484"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/meal_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/ingredients_text_view" >
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimationView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/no_result" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/category_recycler"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="160dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
@@ -93,9 +105,32 @@
         app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="@id/meal_image_view"
         app:layout_constraintTop_toBottomOf="@+id/category_text_view" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/category_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/meal_image_view"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="@id/meal_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/category_text_view">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimationView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/no_result" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <TextView
         android:id="@+id/area_text_view"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:text="Country"
@@ -104,7 +139,7 @@
         android:layout_marginStart="10dp"
         app:layout_constraintTop_toBottomOf="@id/category_recycler"
         android:layout_marginTop="20dp"
-
+        android:textColor="@color/colorBlue"
         tools:layout_editor_absoluteX="31dp"
         tools:layout_editor_absoluteY="34dp" />
 
@@ -112,7 +147,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/area_recycler"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="160dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
@@ -121,10 +156,33 @@
         app:layout_constraintStart_toStartOf="@id/meal_image_view"
         app:layout_constraintTop_toBottomOf="@+id/area_text_view" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/country_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/meal_image_view"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="@id/meal_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/area_text_view" >
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/no_result_country"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/no_result" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/meal_image_view"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="180dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
@@ -140,17 +198,6 @@
         app:layout_constraintTop_toBottomOf="@id/daily_meal_text_view"
         app:riv_border_color="@color/black"
         app:riv_corner_radius="20dp" />
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/favorite_image_view"
-        android:layout_width="60dp"
-        android:layout_height="61dp"
-        android:layout_centerInParent="true"
-        android:layout_margin="10dp"
-        app:layout_constraintRight_toRightOf="@id/meal_image_view"
-        app:layout_constraintTop_toTopOf="@id/meal_image_view"
-        android:src="@drawable/favorite_border"
-        tools:layout_editor_absoluteX="313dp"
-        tools:layout_editor_absoluteY="48dp" />
 
     <TextView
         android:id="@+id/random_text_view"
@@ -168,40 +215,75 @@
         app:layout_constraintStart_toStartOf="@id/meal_image_view"
         app:layout_constraintTop_toTopOf="@+id/meal_image_view" />
 
-    <EditText
-        android:id="@+id/category_search_edit_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Search On Category"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/category_recycler"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/category_search_input_layout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:textColorHint="@color/colorBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/category_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/meal_image_view" />
+        app:layout_constraintTop_toBottomOf="@+id/meal_image_view">
 
-    <EditText
-        android:id="@+id/search_ingredients_edit_text"
-        android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/category_search_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search On Category"
+            android:inputType="text"
+            android:textColor="@color/colorBlue" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_ingredients_input_layout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Search On Ingredients"
-        android:inputType="text"
+        android:layout_marginTop="8dp"
+        android:textColorHint="@color/colorBlue"
         app:layout_constraintBottom_toTopOf="@+id/ingredients_recycler"
-        app:layout_constraintStart_toStartOf="@+id/category_search_edit_text"
-        app:layout_constraintTop_toBottomOf="@+id/area_recycler" />
+        app:layout_constraintStart_toStartOf="@+id/country_search_input_layout"
+        app:layout_constraintTop_toBottomOf="@+id/area_recycler">
 
-    <EditText
-        android:id="@+id/country_search_edit_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Search On Country"
-        android:inputType="text"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_ingredients_edit_text"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:hint="Search On Ingredients"
+            android:textColor="@color/colorBlue"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/country_search_input_layout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:textColorHint="@color/colorBlue"
         app:layout_constraintBottom_toTopOf="@+id/area_recycler"
-        app:layout_constraintStart_toStartOf="@+id/category_search_edit_text"
-        app:layout_constraintTop_toBottomOf="@+id/category_recycler" />
+        app:layout_constraintStart_toStartOf="@+id/category_search_input_layout"
+        app:layout_constraintTop_toBottomOf="@+id/category_recycler">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/country_search_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search On Country"
+            android:textColor="@color/colorBlue"
+            android:textColorHint="@color/colorBlue"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
+
 

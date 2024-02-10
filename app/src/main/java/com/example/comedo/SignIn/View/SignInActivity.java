@@ -1,27 +1,25 @@
 package com.example.comedo.SignIn.View;
 
-import static java.security.AccessController.getContext;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+
 import com.example.comedo.HomePage.HomePageActivity;
+import com.example.comedo.Models.MealModel;
+import com.example.comedo.Models.PlanDetailsModel;
 import com.example.comedo.R;
+import com.example.comedo.RoomDB.MealDataBase;
 import com.example.comedo.SignIn.Presenter.SignInPresenter;
 import com.example.comedo.SignIn.Presenter.SignInPresenterInterface;
 import com.example.comedo.SignUp.View.SignUpActivity;
@@ -29,27 +27,31 @@ import com.example.comedo.SignUp.View.SignUpActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
+
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
-
-import com.google.android.material.imageview.ShapeableImageView;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SignInActivity extends AppCompatActivity implements SignInViewInterface{
 
     EditText emailText;
     EditText passwordText;
-    Button signInButton,googleSignIN,guestMode;
-    TextView signUpLink;
+    Button signInButton,googleSignIN,guestMode,signUpLink;
     SignInPresenterInterface signInPresenterInterface;
     GoogleSignInClient googleSignInClient;
     FirebaseAuth auth;
@@ -88,8 +90,8 @@ public class SignInActivity extends AppCompatActivity implements SignInViewInter
 
         emailText = findViewById(R.id.user_name_text);
         passwordText = findViewById(R.id.password_text);
-        signInButton = findViewById(R.id.signin_button);
-        signUpLink = findViewById(R.id.signup_link);
+        signInButton = findViewById(R.id.signin_in_button);
+        signUpLink = findViewById(R.id.signup_link_button);
         signInPresenterInterface = new SignInPresenter(this);
 
         signUpLink.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +128,48 @@ public class SignInActivity extends AppCompatActivity implements SignInViewInter
 
     @Override
     public void successSignUp() {
+        DatabaseReference databaseReferenceFavorite = FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("FavoriteMeals");
+        databaseReferenceFavorite.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SuspiciousIndentation")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<MealModel> mealModelList = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    MealModel mealModel = dataSnapshot.getValue(MealModel.class);
+                    mealModelList.add(mealModel);
+                }
+                new Thread(()->{
+                    for(int i=0;i<mealModelList.size();i++)
+                        MealDataBase.getInstance(getApplicationContext()).getMealDao().insertMeal(mealModelList.get(i));
+                }).start();
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.i("TAG", "onCancelled: " + error.getMessage());
+            }
+        });
+
+        DatabaseReference databaseReferenceCalendar = FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("CalendarMeals");
+        databaseReferenceCalendar.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<PlanDetailsModel> planDetailsModelList = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    PlanDetailsModel planDetailsModel = dataSnapshot.getValue(PlanDetailsModel.class);
+                    planDetailsModelList.add(planDetailsModel);
+                }
+                new Thread(()->{
+                    for(int i=0;i<planDetailsModelList.size();i++)
+                        MealDataBase.getInstance(getApplicationContext()).getMealDao().insertMealPlan(planDetailsModelList.get(i));
+                }).start();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.i("TAG", "onCancelled: " + error.getMessage());
+            }
+        });
         Intent intent = new Intent(SignInActivity.this, HomePageActivity.class);
         startActivity(intent);
         finish();

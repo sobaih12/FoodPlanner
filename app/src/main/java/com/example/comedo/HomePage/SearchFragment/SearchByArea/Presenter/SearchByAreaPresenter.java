@@ -1,16 +1,16 @@
 package com.example.comedo.HomePage.SearchFragment.SearchByArea.Presenter;
 
-import android.util.Log;
+
 
 import androidx.navigation.Navigation;
 
 import com.example.comedo.HomePage.HomeFragment.View.HomePageFragmentInterface;
 import com.example.comedo.HomePage.SearchFragment.SearchByArea.View.SearchByAreaViewDirections;
 import com.example.comedo.HomePage.SearchFragment.SearchByArea.View.SearchByAreaViewInterface;
-import com.example.comedo.HomePage.SearchFragment.SearchByCategory.View.SearchByCategoryViewDirections;
-import com.example.comedo.HomePage.SearchFragment.SearchByCategory.View.SearchByCategoryViewInterface;
+
+
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.View.SearchApiService;
-import com.example.comedo.HomePage.SearchFragment.SearchByNameView.View.SearchFragmentDirections;
+
 import com.example.comedo.Models.MealListModel;
 import com.example.comedo.Models.MealPreviewModel;
 
@@ -57,16 +57,14 @@ public class SearchByAreaPresenter implements SearchByAreaPresenterInterface{
                         SearchByAreaViewDirections.ActionSearchByAreaViewToRandomMealFragment action =
                                 SearchByAreaViewDirections.actionSearchByAreaViewToRandomMealFragment(mealListModel.getMeals().get(0));
                         Navigation.findNavController(searchViewInterface.getViewFromFragment()).navigate(action);
-                        Log.i("TAG", "onSuccess: "+mealListModel.getMeals().size());
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.i("TAG", "onError: "+e.getMessage());
+
                     }
                 });
     }
-
     @Override
     public void onViewCreatedSearchOnArea(String areaName, String searchName) {
         retrofit = new Retrofit.Builder()
@@ -76,36 +74,27 @@ public class SearchByAreaPresenter implements SearchByAreaPresenterInterface{
                 .build();
         searchApiService = retrofit.create(SearchApiService.class);
         Single<MealPreviewModel> mealPreviewModelSingle = searchApiService.getSearchByArea(areaName);
-
-
-
-
         mealPreviewModelSingle.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<MealPreviewModel>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
-
                     }
-
                     @Override
                     public void onSuccess(@NonNull MealPreviewModel categoriesItemListModel) {
                         Observable.fromIterable(categoriesItemListModel.getMeals())
                                 .filter(meal -> meal.getStrMeal().toLowerCase().contains(searchName))
                                 .collect(Collectors.toList())
                                 .subscribe(filteredMeals -> {
-                                    Log.i("TAG", "onSuccess: filter "+filteredMeals.get(0).getStrMeal());
                                     if (searchViewInterface != null) {
                                         searchViewInterface.onSuccessSearchByArea( new MealPreviewModel(filteredMeals));
                                     } else {
-                                        Log.i("TAG", "onSuccess: searchViewInterface is null");
+
                                     }
                                 });
                     }
-
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.i("TAG", "onError: "+e.getMessage());
                     }
                 });
     }

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#D1CFCF</color>
-
         <!-- Define your primary color -->
-        <color name="colorPrimary">#4F6F52</color>
+        <color name="colorPrimary">#8CB9BD</color>
         <!-- Define your primary dark color (status bar color) -->
-        <color name="colorPrimaryDark">#739072</color>
+        <color name="colorBlue">#8CB9BD</color>
         <!-- Define your accent color -->
-        <color name="colorAccent">#86A789</color>
+        <color name="colorAccent">#F2D388</color>
+    <color name="colorYellow">#F2D388</color>
         <!-- Add other colors as needed -->
-    <color name="textPrimaryColor">#E8C872</color> <!-- Primary text color -->
+    <color name="textPrimaryColor">#E8C872</color> <!-- Primary 8CB9BDtext color -->
     <color name="textSecondaryColor">#D2E3C8</color> <!-- Secondary text color -->
 
 

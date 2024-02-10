@@ -22,8 +22,6 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.SearchViewHolder> {
 
     private List<PlanDetailsModel> items;
@@ -31,28 +29,21 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Search
     OnCalendarClickListener listener;
 
 
-    // Constructor to initialize the adapter with data and context
     public CalendarAdapter(List<PlanDetailsModel> dataSet, Context context, OnCalendarClickListener listener) {
         this.items = dataSet;
         this.context = context;
         this.listener = listener;
     }
 
-    // ViewHolder class to hold the views for each item
     public static class SearchViewHolder extends RecyclerView.ViewHolder {
         RoundedImageView mealImageView;
         TextView mealTextView;
-        CircleImageView favoriteImageView;
         ConstraintLayout constraintLayout;
         ImageView removeCalendar;
-        FirebaseDatabase firebaseDatabase;
-
         public SearchViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Initialize your views from search_cell.xml here
             mealImageView = itemView.findViewById(R.id.meal_search_image_view);
             mealTextView = itemView.findViewById(R.id.meal_search_text_view);
-            favoriteImageView = itemView.findViewById(R.id.favorite_image_view);
             constraintLayout = itemView.findViewById(R.id.constraintLayout);
             removeCalendar = itemView.findViewById(R.id.remove_calendar);
         }
@@ -61,7 +52,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Search
     @NonNull
     @Override
     public CalendarAdapter.SearchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate your search_cell layout here
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.calendar_cell, parent, false);
         return new CalendarAdapter.SearchViewHolder(view);
     }
@@ -92,11 +82,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Search
                     MealDataBase.getInstance(v.getContext()).getMealDao().deleteMealPlan(item);
                     Log.i("TAG", "onClick: Data Successfully Deleted To Room");
                 }).start();
-
             }
         });
-
-
     }
 
     public int getItemCount() {
@@ -107,8 +94,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Search
         this.items = mealModels;
         notifyDataSetChanged();
     }
-
-
 }
 
 

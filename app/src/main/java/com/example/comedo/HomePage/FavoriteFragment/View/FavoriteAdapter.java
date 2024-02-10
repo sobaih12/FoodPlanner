@@ -19,7 +19,6 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.SearchViewHolder> {
 
@@ -27,26 +26,21 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Search
     private Context context;
     OnFavoriteClickListener listener;
 
-    // Constructor to initialize the adapter with data and context
     public FavoriteAdapter(List<MealModel> dataSet, Context context,OnFavoriteClickListener listener) {
         this.items = dataSet;
         this.context = context;
         this.listener = listener;
     }
 
-    // ViewHolder class to hold the views for each item
     public static class SearchViewHolder extends RecyclerView.ViewHolder {
         RoundedImageView mealImageView;
         TextView mealTextView;
-        CircleImageView favoriteImageView;
         ConstraintLayout constraintLayout;
 
         public SearchViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Initialize your views from search_cell.xml here
             mealImageView = itemView.findViewById(R.id.meal_search_image_view);
             mealTextView = itemView.findViewById(R.id.meal_search_text_view);
-            favoriteImageView = itemView.findViewById(R.id.favorite_image_view);
             constraintLayout = itemView.findViewById(R.id.constraintLayout);
         }
     }
@@ -54,7 +48,6 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Search
     @NonNull
     @Override
     public FavoriteAdapter.SearchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate your search_cell layout here
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_cell, parent, false);
         return new FavoriteAdapter.SearchViewHolder(view);
     }
@@ -75,17 +68,9 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Search
                 listener.onFavoriteClickListener(item);
             }
         });
-
-
-
     }
-
     public int getItemCount() {
         if(items==null) return 0;
         return items.size();
     }
-
-
 }
-
-

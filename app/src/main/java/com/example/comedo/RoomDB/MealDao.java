@@ -17,8 +17,6 @@ public interface MealDao {
     LiveData<List<MealModel>> getAllMeals();
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertMeal(MealModel mealModel);
-    @Query("SELECT * From PlanDetails")
-    LiveData<List<PlanDetailsModel>> getAllMealsPlan();
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertMealPlan(PlanDetailsModel planDetailsModel);
     @Query("SELECT * FROM PlanDetails where date=:date")

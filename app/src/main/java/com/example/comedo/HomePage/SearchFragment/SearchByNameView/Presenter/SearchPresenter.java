@@ -1,21 +1,14 @@
 package com.example.comedo.HomePage.SearchFragment.SearchByNameView.Presenter;
 
-import android.util.Log;
-import android.view.View;
 
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import com.example.comedo.HomePage.HomeFragment.View.HomePageFragmentInterface;
-import com.example.comedo.HomePage.RandomMealFragment.View.RandomMealFragmentViewInterface;
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.View.SearchApiService;
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.View.SearchFragmentDirections;
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.View.SearchViewInterface;
 import com.example.comedo.Models.MealListModel;
-import com.example.comedo.Models.MealModel;
-import com.example.comedo.Models.MealPreviewModel;
 
-import java.util.List;
+
+
 
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -31,22 +24,9 @@ public class SearchPresenter implements SearchPresenterInterface{
     public static final String baseUrl = "https://www.themealdb.com/api/json/v1/1/";
     Retrofit retrofit;
     SearchApiService searchApiService;
-    LinearLayoutManager linearLayoutManager;
-    List<MealModel> mealModels;
     SearchViewInterface searchViewInterface;
-    RandomMealFragmentViewInterface randomMealFragmentViewInterface;
-    HomePageFragmentInterface homePageFragmentInterface;
-
-    public SearchPresenter(RandomMealFragmentViewInterface randomMealFragmentViewInterface) {
-        this.randomMealFragmentViewInterface = randomMealFragmentViewInterface;
-    }
-
     public SearchPresenter(SearchViewInterface searchViewInterface) {
         this.searchViewInterface = searchViewInterface;
-    }
-
-    public SearchPresenter(HomePageFragmentInterface homePageFragmentInterface, String message) {
-        this.homePageFragmentInterface = homePageFragmentInterface;
     }
 
     @Override
@@ -76,7 +56,6 @@ public class SearchPresenter implements SearchPresenterInterface{
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.i("TAG", "onError: "+e.getMessage());
                     }
                 });
     }
@@ -97,22 +76,12 @@ public class SearchPresenter implements SearchPresenterInterface{
                     public void onSuccess(@NonNull MealListModel mealListModel) {
                         SearchFragmentDirections.ActionSearchFragmentToRandomMealFragment action = SearchFragmentDirections.actionSearchFragmentToRandomMealFragment(mealListModel.getMeals().get(0) );
                         Navigation.findNavController(searchViewInterface.getViewFromFragment()).navigate(action);
-                        Log.i("TAG", "onSuccess: "+mealListModel.getMeals().size());
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.i("TAG", "onError: "+e.getMessage());
+
                     }
                 });
     }
-
-    @Override
-    public View getView() {
-        View view;
-        view = searchViewInterface.getViewFromFragment();
-        return view;
-    }
-
-
 }

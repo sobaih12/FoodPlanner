@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.comedo.Models.AreaModel;
+
 import com.example.comedo.Models.IngredientModel;
 import com.example.comedo.R;
 import com.makeramen.roundedimageview.RoundedImageView;

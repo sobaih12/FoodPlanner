@@ -16,7 +16,7 @@ public abstract class MealDataBase extends RoomDatabase {
     public static synchronized MealDataBase getInstance(Context context){
         if(instance == null){
             instance = Room
-                    .databaseBuilder(context.getApplicationContext(), MealDataBase.class, "favoriteMeals")
+                    .databaseBuilder(context.getApplicationContext(), MealDataBase.class, "favoriteMeals.db")
                     .build();
         }
         return instance;

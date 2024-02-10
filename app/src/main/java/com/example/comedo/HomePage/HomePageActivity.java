@@ -7,17 +7,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 
-import com.example.comedo.HomePage.HomeFragment.View.RandomMealApiService;
+
 import com.example.comedo.R;
 import com.example.comedo.SignIn.View.SignInActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -60,7 +55,6 @@ public class HomePageActivity extends AppCompatActivity  {
                     return false;
                 }
             }
-
             return NavigationUI.onNavDestinationSelected(item, navController);
         });
 
@@ -83,6 +77,4 @@ public class HomePageActivity extends AppCompatActivity  {
         dialog.setCancelable(false);
         dialog.show();
     }
-
-
 }

@@ -1,12 +1,10 @@
 package com.example.comedo.HomePage.SearchFragment.SearchByIngredients.Presenter;
 
-import android.util.Log;
+
 
 import androidx.navigation.Navigation;
 
 import com.example.comedo.HomePage.HomeFragment.View.HomePageFragmentInterface;
-import com.example.comedo.HomePage.SearchFragment.SearchByArea.View.SearchByAreaViewDirections;
-import com.example.comedo.HomePage.SearchFragment.SearchByArea.View.SearchByAreaViewInterface;
 import com.example.comedo.HomePage.SearchFragment.SearchByIngredients.View.SearchByIngredientsViewDirections;
 import com.example.comedo.HomePage.SearchFragment.SearchByIngredients.View.SearchByIngredientsViewInterface;
 import com.example.comedo.HomePage.SearchFragment.SearchByNameView.View.SearchApiService;
@@ -42,7 +40,6 @@ public class SearchByIngredientsPresenter implements SearchByIngredientsPresente
     @Override
     public void onViewCreatedSearchOnMeal(String mealName) {
         Single<MealListModel> mealListModelObservable = searchApiService.getSearchByName(mealName);
-
         mealListModelObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<MealListModel>() {
@@ -56,16 +53,13 @@ public class SearchByIngredientsPresenter implements SearchByIngredientsPresente
                         SearchByIngredientsViewDirections.ActionSearchByIngredientsViewToRandomMealFragment action =
                                 SearchByIngredientsViewDirections.actionSearchByIngredientsViewToRandomMealFragment(mealListModel.getMeals().get(0));
                         Navigation.findNavController(searchViewInterface.getViewFromFragment()).navigate(action);
-                        Log.i("TAG", "onSuccess: "+mealListModel.getMeals().size());
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.i("TAG", "onError: "+e.getMessage());
                     }
                 });
     }
-
     @Override
     public void onViewCreatedSearchOnIngredients(String ingredientName, String searchName) {
         retrofit = new Retrofit.Builder()
@@ -75,10 +69,6 @@ public class SearchByIngredientsPresenter implements SearchByIngredientsPresente
                 .build();
         searchApiService = retrofit.create(SearchApiService.class);
         Single<MealPreviewModel> mealPreviewModelSingle = searchApiService.getSearchByIngredient(ingredientName);
-
-
-
-
         mealPreviewModelSingle.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<MealPreviewModel>() {
@@ -86,25 +76,21 @@ public class SearchByIngredientsPresenter implements SearchByIngredientsPresente
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
-
                     @Override
                     public void onSuccess(@NonNull MealPreviewModel categoriesItemListModel) {
                         Observable.fromIterable(categoriesItemListModel.getMeals())
                                 .filter(meal -> meal.getStrMeal().toLowerCase().contains(searchName))
                                 .collect(Collectors.toList())
                                 .subscribe(filteredMeals -> {
-                                    Log.i("TAG", "onSuccess: filter "+filteredMeals.get(0).getStrMeal());
                                     if (searchViewInterface != null) {
                                         searchViewInterface.onSuccessSearchByIngredient( new MealPreviewModel(filteredMeals));
                                     } else {
-                                        Log.i("TAG", "onSuccess: searchViewInterface is null");
                                     }
                                 });
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.i("TAG", "onError: "+e.getMessage());
                     }
                 });
     }

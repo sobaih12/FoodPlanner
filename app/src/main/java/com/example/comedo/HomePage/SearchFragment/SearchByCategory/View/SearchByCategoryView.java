@@ -2,6 +2,7 @@ package com.example.comedo.HomePage.SearchFragment.SearchByCategory.View;
 
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.SearchByCategoryPresenter;
 import com.example.comedo.HomePage.SearchFragment.SearchByCategory.Presenter.SearchByCategoryPresenterInterface;
@@ -29,12 +31,13 @@ public class SearchByCategoryView extends Fragment implements SearchByCategoryVi
     RecyclerView recyclerView;
     EditText searchCategoryText;
     MealPreviewModel catItemListModel;
+    TextView textView;
+    ConstraintLayout noResult;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,8 +46,10 @@ public class SearchByCategoryView extends Fragment implements SearchByCategoryVi
         searchByCategoryPresenterInterface = new SearchByCategoryPresenter(this);
         recyclerView = view.findViewById(R.id.search_category_recycler_view);
         searchCategoryText = view.findViewById(R.id.search_category_text);
-
+        textView = view.findViewById(R.id.search_label);
+        noResult = view.findViewById(R.id.no_result_search_category);
         String mealName = SearchByCategoryViewArgs.fromBundle(getArguments()).getCategoryName();
+        textView.setText("Filtered by "+mealName+" category");
         searchByCategoryPresenterInterface.onViewCreatedSearchOnCategory(mealName,searchCategoryText.getText().toString());
         searchCategoryText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -62,13 +67,8 @@ public class SearchByCategoryView extends Fragment implements SearchByCategoryVi
 
             }
         });
-
-
-
-
         return view;
     }
-
     @Override
     public void onSuccessSearchByCategory(MealPreviewModel categoriesItemListModel) {
         this.catItemListModel = categoriesItemListModel;
@@ -77,11 +77,11 @@ public class SearchByCategoryView extends Fragment implements SearchByCategoryVi
         recyclerView.setLayoutManager(linearLayoutManager);
         SearchByCategoryAdapter searchAdapter = new SearchByCategoryAdapter(categoriesItemListModel,getContext(),this);
         recyclerView.setAdapter(searchAdapter);
+
     }
 
     @Override
     public void onSuccessSearchByCategoryFilter(String filter) {
-        MealPreviewModel mealPreviewModel;
         Observable.fromIterable(catItemListModel.getMeals())
                 .filter(meal -> meal.getStrMeal().toLowerCase().contains(filter))
                 .collect(Collectors.toList())
@@ -91,13 +91,14 @@ public class SearchByCategoryView extends Fragment implements SearchByCategoryVi
                     recyclerView.setLayoutManager(linearLayoutManager);
                     SearchByCategoryAdapter searchAdapter = new SearchByCategoryAdapter(new MealPreviewModel(filteredMeals),getContext(),this);
                     recyclerView.setAdapter(searchAdapter);
-//                    onSuccessSearchByCategory();
+                    if (filteredMeals.size() == 0   || searchCategoryText.getText().toString() == null) {
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        noResult.setVisibility(View.VISIBLE);
+                    } else {
+                        recyclerView.setVisibility(View.VISIBLE);
+                        noResult.setVisibility(View.GONE);
+                    }
                 });
-//        linearLayoutManager = new LinearLayoutManager(getContext());
-//        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-//        recyclerView.setLayoutManager(linearLayoutManager);
-//        SearchByCategoryAdapter searchAdapter = new SearchByCategoryAdapter(filteredMeals,getContext(),this);
-//        recyclerView.setAdapter(searchAdapter);
     }
 
 
@@ -112,9 +113,4 @@ public class SearchByCategoryView extends Fragment implements SearchByCategoryVi
     public void onMealCategoryClickListener(String mealName) {
         searchByCategoryPresenterInterface.onViewCreatedSearchOnMeal(mealName);
     }
-
-//    @Override
-//    public void onMealCategoryClickListener(String mealName) {
-//        searchByCategoryPresenterInterface.onViewCreatedSearchOnCategory(mealName);
-//    }
 }

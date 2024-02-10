@@ -6,73 +6,109 @@
     android:layout_height="match_parent"
     tools:context=".SignIn.View.SignInActivity">
 
-    <EditText
-        android:id="@+id/user_name_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="46dp"
-        android:layout_marginTop="58dp"
-        android:layout_marginBottom="187dp"
-        android:ems="10"
-        android:hint="Enter Your Email ..."
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/signInButton"
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="260dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="112dp"
+        android:background="@drawable/_c9r54t1pm01zxgn1fohzcar6qp"
+        app:layout_constraintBottom_toTopOf="@+id/password_text_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/password_text"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/signup_link_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="15dp"
+        android:text="SignUp"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/google_botton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_text_layout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/user_name_text_layout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="303dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
+        android:hint="Enter Your Email ..."
+        android:textColorHint="@color/colorBlue"
+        app:layout_constraintBottom_toTopOf="@+id/password_text_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_name_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/colorBlue"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password_text_layout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="303dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="91dp"
         android:hint="Enter Your Password ..."
-        android:inputType="textPassword"
-        app:layout_constraintStart_toStartOf="@+id/user_name_text"
-        app:layout_constraintTop_toBottomOf="@+id/user_name_text" />
+        android:textColorHint="@color/colorBlue"
+        app:layout_constraintBottom_toTopOf="@+id/signup_link_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textColor="@color/colorBlue" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/signin_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Login"
+        android:id="@+id/signin_in_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="Sign In"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/signup_link_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_text" />
-
-    <TextView
-        android:id="@+id/signup_link"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Sign Up"
-        android:textColor="#0000FF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signin_button" />
+        app:layout_constraintTop_toBottomOf="@+id/password_text_layout" />
 
     <Button
         android:id="@+id/google_botton"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="136dp"
-        android:layout_marginBottom="361dp"
-        android:text="Google SignIn"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="18dp"
+        android:text="Google Sign In"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/guest_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_name_text"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup_link_button" />
 
     <Button
         android:id="@+id/guest_button"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="136dp"
+        android:layout_marginBottom="67dp"
         android:text="Guest Mode"
+        android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_name_text"
-        app:layout_constraintVertical_bias="0.501" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/google_botton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

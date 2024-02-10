@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,8 +18,7 @@ import com.google.firebase.FirebaseApp;
 public class SignUpActivity extends AppCompatActivity implements SignUpViewInterface {
 
     private EditText userNameEditText, passwordEditText;
-    private Button signUpButton;
-    private TextView signInLink;
+    private Button signUpButton,signInLink;
     private SignUpPresenterInterface signUpPresenterInterface;
 
 
@@ -34,8 +32,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpViewInter
         signUpPresenterInterface = new SignUpPresenter(this);
         userNameEditText = findViewById(R.id.user_name_text);
         passwordEditText = findViewById(R.id.password_text);
-        signUpButton = findViewById(R.id.signup_button);
-        signInLink = findViewById(R.id.signin_link);
+        signUpButton = findViewById(R.id.signUpInButton);
+        signInLink = findViewById(R.id.signin_in_button);
         signInLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

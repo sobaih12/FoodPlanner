@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
@@ -15,10 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.example.comedo.HomePage.FavoriteFragment.Presenter.FavoritePresenter;
-import com.example.comedo.HomePage.FavoriteFragment.Presenter.FavoritePresenterInterface;
+
 import com.example.comedo.Models.MealModel;
 import com.example.comedo.R;
 import com.example.comedo.RoomDB.MealDataBase;
@@ -27,11 +26,11 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
-public class FavoriteFragment extends Fragment implements OnFavoriteClickListener,FavoriteFragmentInterface {
+public class FavoriteFragment extends Fragment implements OnFavoriteClickListener {
     RecyclerView favoriteRecyclerView;
     LinearLayoutManager linearLayoutManager;
-    FavoritePresenterInterface favoritePresenterInterface;
     ImageView logoutImage;
+    ConstraintLayout noResult;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +44,7 @@ public class FavoriteFragment extends Fragment implements OnFavoriteClickListene
         view = inflater.inflate(R.layout.fragment_favourite, container, false);
         favoriteRecyclerView = view.findViewById(R.id.favorite_recycler_view);
         logoutImage = view.findViewById(R.id.logout_image);
-        favoritePresenterInterface = new FavoritePresenter(this);
+        noResult = view.findViewById(R.id.no_result_favorite);
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         favoriteRecyclerView.setLayoutManager(linearLayoutManager);
@@ -53,6 +52,13 @@ public class FavoriteFragment extends Fragment implements OnFavoriteClickListene
             @Override
             public void onChanged(List<MealModel> mealModels) {
                 ViewData(mealModels);
+                if (mealModels.size() == 0 ) {
+                    favoriteRecyclerView.setVisibility(View.INVISIBLE);
+                    noResult.setVisibility(View.VISIBLE);
+                } else {
+                    favoriteRecyclerView.setVisibility(View.VISIBLE);
+                    noResult.setVisibility(View.GONE);
+                }
             }
         });
         logoutImage.setOnClickListener(new View.OnClickListener() {
@@ -89,14 +95,6 @@ public class FavoriteFragment extends Fragment implements OnFavoriteClickListene
         FavoriteFragmentDirections.ActionFavouriteFragmentToRandomMealFragment action =
                 FavoriteFragmentDirections.actionFavouriteFragmentToRandomMealFragment(mealName);
         Navigation.findNavController(getView()).navigate(action);
-//        favoritePresenterInterface.onViewCreatedSearchOnMeal(mealName);
-    }
-
-    @Override
-    public View getViewFromFragment() {
-        View view;
-        view =getView();
-        return view;
     }
     void ViewData(List<MealModel> mealModels){
         FavoriteAdapter favoriteAdapter = new FavoriteAdapter(mealModels, getContext(),this);
