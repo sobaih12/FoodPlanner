@@ -4,9 +4,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#D1CFCF</color>
         <!-- Define your primary color -->
-        <color name="colorPrimary">#8CB9BD</color>
+        <color name="colorPrimary">#596FB7</color>
         <!-- Define your primary dark color (status bar color) -->
-        <color name="colorBlue">#8CB9BD</color>
+        <color name="colorBlue">#596FB7</color>
         <!-- Define your accent color -->
         <color name="colorAccent">#F2D388</color>
     <color name="colorYellow">#F2D388</color>

@@ -26,6 +26,8 @@
         android:layout_height="50dp"
         android:layout_marginBottom="15dp"
         android:text="SignUp"
+        android:textSize="18sp"
+
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@+id/google_botton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,6 +65,8 @@
         android:textColorHint="@color/colorBlue"
         app:layout_constraintBottom_toTopOf="@+id/signup_link_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:endIconMode="password_toggle"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4">
 
@@ -81,6 +85,7 @@
         android:layout_height="50dp"
         android:text="Sign In"
         android:textColor="@color/colorAccent"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/signup_link_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,6 +97,8 @@
         android:layout_height="50dp"
         android:layout_marginBottom="18dp"
         android:text="Google Sign In"
+        android:textSize="18sp"
+
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@+id/guest_button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,6 +112,8 @@
         android:layout_height="50dp"
         android:layout_marginBottom="67dp"
         android:text="Guest Mode"
+        android:textSize="18sp"
+
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

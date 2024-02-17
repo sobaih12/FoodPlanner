@@ -43,6 +43,7 @@
         android:hint="Enter Your Password ..."
         android:inputType="textPassword"
         android:textColorHint="@color/colorBlue"
+        app:endIconMode="password_toggle"
         app:layout_constraintBottom_toTopOf="@+id/signUpInButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
+
             android:textColor="@color/colorBlue" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -63,6 +65,8 @@
         android:layout_height="50dp"
         android:layout_marginBottom="13dp"
         android:text="SignUp"
+        android:textSize="18sp"
+
         android:textColor="@color/colorYellow"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,6 +80,8 @@
         android:layout_marginBottom="124dp"
         android:background="@null"
         android:text="Sign In"
+        android:textSize="18sp"
+
         android:textColor="@color/colorYellow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,10 +90,10 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="260dp"
+        android:layout_height="200dp"
         android:layout_marginStart="75dp"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="75dp"
         android:layout_marginBottom="44dp"
         android:background="@drawable/_c9r54t1pm01zxgn1fohzcar6qp"

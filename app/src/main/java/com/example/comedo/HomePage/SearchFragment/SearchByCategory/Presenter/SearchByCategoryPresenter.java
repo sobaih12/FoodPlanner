@@ -69,6 +69,7 @@ public class SearchByCategoryPresenter implements SearchByCategoryPresenterInter
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build();
         searchApiService = retrofit.create(SearchApiService.class);
+
         Single<MealPreviewModel> mealPreviewModelSingle = searchApiService.getSearchByCategory(categoryName);
         mealPreviewModelSingle.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

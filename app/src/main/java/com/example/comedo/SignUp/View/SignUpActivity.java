@@ -66,6 +66,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpViewInter
         Toast.makeText(SignUpActivity.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override

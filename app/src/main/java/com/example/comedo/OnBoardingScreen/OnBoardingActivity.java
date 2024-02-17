@@ -35,6 +35,7 @@ public class OnBoardingActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(OnBoardingActivity.this,SignInActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

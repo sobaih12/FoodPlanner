@@ -45,9 +45,9 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
     RecyclerView categoryRecyclerView,areaRecycler,ingredientsRecycler;
     LinearLayoutManager linearLayoutManager;
     ImageView randomImageView;
-    TextView randomTextView;
+    TextView randomTextView,daily_meal_text_view,category_text_view,area_text_view,ingredients_text_view;
     EditText categorySearch,areaSearch,ingredientsSearch;
-    ConstraintLayout noResultCategory,noResultCountry, noResultIngredients;
+    ConstraintLayout noResultCategory,noResultCountry, noResultIngredients,noResult;
 
 
     HomePageFragmentPresenterInterface homePageFragmentPresenterInterface;
@@ -78,6 +78,7 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         View view;
         view =  inflater.inflate(R.layout.fragment_home_page, container, false);
 
+
         homePageFragmentPresenterInterface =  new HomePageFragmentPresenter(this);
         searchByCategoryPresenterInterface = new SearchByCategoryPresenter(this);
         searchByAreaPresenterInterface = new SearchByAreaPresenter(this);
@@ -93,6 +94,12 @@ public class HomePageFragment extends Fragment implements HomePageFragmentInterf
         noResultCountry = view.findViewById(R.id.country_no_result);
         noResultCategory = view.findViewById(R.id.category_no_result);
         noResultIngredients = view.findViewById(R.id.no_result_ingredients);
+        noResult = view.findViewById(R.id.no_wifi);
+        daily_meal_text_view = view.findViewById(R.id.daily_meal_text_view);
+        category_text_view = view.findViewById(R.id.category_text_view);
+        area_text_view = view.findViewById(R.id.area_text_view);
+        ingredients_text_view = view.findViewById(R.id.ingredients_text_view);
+
         homePageFragmentPresenterInterface.onCreateViewRandomMeal();
         homePageFragmentPresenterInterface.onCreateViewCategories(categorySearch.getText().toString());
         categorySearch.setText("");

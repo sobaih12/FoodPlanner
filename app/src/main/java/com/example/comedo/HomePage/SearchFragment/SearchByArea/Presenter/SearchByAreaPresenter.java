@@ -51,6 +51,7 @@ public class SearchByAreaPresenter implements SearchByAreaPresenterInterface{
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
+                    
 
                     @Override
                     public void onSuccess(@NonNull MealListModel mealListModel) {
@@ -82,6 +83,7 @@ public class SearchByAreaPresenter implements SearchByAreaPresenterInterface{
                     }
                     @Override
                     public void onSuccess(@NonNull MealPreviewModel categoriesItemListModel) {
+                        //yasmin00--->
                         Observable.fromIterable(categoriesItemListModel.getMeals())
                                 .filter(meal -> meal.getStrMeal().toLowerCase().contains(searchName))
                                 .collect(Collectors.toList())

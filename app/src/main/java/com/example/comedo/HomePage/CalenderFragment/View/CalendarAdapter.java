@@ -1,6 +1,8 @@
 package com.example.comedo.HomePage.CalenderFragment.View;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,15 +77,31 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Search
         holder.removeCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                DatabaseReference databaseReferenceCalendar = firebaseDatabase.getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("CalendarMeals");
-                databaseReferenceCalendar.child(item.idMeal).removeValue();
-                new Thread(()->{
-                    MealDataBase.getInstance(v.getContext()).getMealDao().deleteMealPlan(item);
-                    Log.i("TAG", "onClick: Data Successfully Deleted To Room");
-                }).start();
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage("Are you sure you want to remove this meal from your calendar?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User clicked Yes, perform the removal action
+                                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                                DatabaseReference databaseReferenceCalendar = firebaseDatabase.getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("CalendarMeals");
+                                databaseReferenceCalendar.child(item.idMeal).removeValue();
+                                new Thread(() -> {
+                                    MealDataBase.getInstance(v.getContext()).getMealDao().deleteMealPlan(item);
+                                    Log.i("TAG", "onClick: Data Successfully Deleted To Room");
+                                }).start();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         });
+
     }
 
     public int getItemCount() {

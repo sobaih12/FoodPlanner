@@ -77,6 +77,7 @@ public class SignInActivity extends AppCompatActivity implements SignInViewInter
                 Intent intent = googleSignInClient.getSignInIntent();
                 startActivityForResult(intent,100);
                 isGuestMode = false;
+
             }
         });
         guestMode.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +86,7 @@ public class SignInActivity extends AppCompatActivity implements SignInViewInter
                 isGuestMode = true;
                 Intent intent = new Intent(SignInActivity.this, HomePageActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -109,6 +111,7 @@ public class SignInActivity extends AppCompatActivity implements SignInViewInter
             public void onClick(View v) {
                 isGuestMode = false;
                 getSignIn();
+
             }
         });
     }

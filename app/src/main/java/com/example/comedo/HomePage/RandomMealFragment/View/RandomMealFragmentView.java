@@ -1,7 +1,9 @@
 package com.example.comedo.HomePage.RandomMealFragment.View;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.comedo.Models.DateFormatter;
 import com.example.comedo.Models.IngredientWithMeasuresModel;
+import com.example.comedo.Models.InternetConnection;
 import com.example.comedo.Models.MealModel;
 import com.example.comedo.Models.PlanDetailsConverter;
 import com.example.comedo.Models.PlanDetailsModel;
@@ -122,7 +125,7 @@ public class RandomMealFragmentView extends Fragment{
             IngredientsAdapter ingredientsAdapter1 = new IngredientsAdapter(processMealModel(mealModel), getContext());
             recyclerView.setAdapter(ingredientsAdapter1);
 
-        }else{
+        }else {
             mealModel = RandomMealFragmentViewArgs.fromBundle(getArguments()).getMealData();
             firebaseDatabase = FirebaseDatabase.getInstance();
             databaseReferenceFavorite = firebaseDatabase.getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("FavoriteMeals").child(mealModel.getIdMeal());
@@ -178,15 +181,30 @@ public class RandomMealFragmentView extends Fragment{
             addedToFavorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                    DatabaseReference databaseReferenceCalendar = firebaseDatabase.getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("FavoriteMeals");
-                    databaseReferenceCalendar.child(mealModel.idMeal).removeValue();
-                    new Thread(()->{
-                        MealDataBase.getInstance(v.getContext()).getMealDao().deleteMeal(mealModel);
-                    }).start();
-                    Toast.makeText(getContext(), "Removed From Favorite", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("Are you sure you want to remove this meal from favorites?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                                    DatabaseReference databaseReferenceCalendar = firebaseDatabase.getReference().child("User").child(FirebaseAuth.getInstance().getUid()).child("FavoriteMeals");
+                                    databaseReferenceCalendar.child(mealModel.idMeal).removeValue();
+                                    new Thread(() -> {
+                                        MealDataBase.getInstance(v.getContext()).getMealDao().deleteMeal(mealModel);
+                                    }).start();
+                                    Toast.makeText(getContext(), "Removed From Favorite", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
                 }
             });
+
         }
     }
     public static List<IngredientWithMeasuresModel> processMealModel(MealModel mealModel) {
